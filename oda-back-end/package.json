@@ -1,0 +1,17 @@
+{
+  "name": "oda-back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@comunica/query-sparql": "^2.5.0",
+    "apollo-server-express": "^3.11.1",
+    "graphql-ld": "^1.4.1"
+  }
+}
