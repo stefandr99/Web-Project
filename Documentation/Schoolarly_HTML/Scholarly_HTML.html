@@ -4,13 +4,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Scholarly HTML</title>
     <link rel="stylesheet" href="./scholarly.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="./Scholarly HTML_files/scholarly.min.js.download"></script>
   </head>
   <body prefix="schema: http://schema.org" cz-shortcut-listen="true">
+    <div class="banner">
+      <img src="./diagrams/scholarly-html.svg" width="227" height="50" alt="Scholarly HTML logo">
+      <div class="status">Open Dataset Visualizer</div>
+    </div>
     <header>
       <h1>ODA Scholarly HTML</h1>
     </header>
-    <div role="contentinfo"><ol role="directory"><li><a href="https://w3c.github.io/scholarly-html/#abstract"><span>1. </span>Abstract</a></li><li><a href="https://w3c.github.io/scholarly-html/#introduction"><span>2. </span>Introduction</a></li><li><a href="https://w3c.github.io/scholarly-html/#structure"><span>3. </span>SPARQL and Datasets</a><ol role="directory"><li><a href="https://w3c.github.io/scholarly-html/#Root"><span>3.1 </span>The root and <code>head</code></a></li><li><a href="https://w3c.github.io/scholarly-html/#article"><span>3.2 </span>The <code>article</code></a></li><li><a href="https://w3c.github.io/scholarly-html/#hunk"><span>3.3 </span>Hunk Elements</a></ol>
+    <div role="contentinfo">
+      <ol role="directory">
+        <li><a href="#abstract"><span>1. </span>Abstract</a></li>
+        <li><a href="#introduction"><span>2. </span>Introduction</a></li>
+        <li><a href="#architecture"><span>3. </span>Arhitecture</a></li>
+        <li><a href="#software-design"><span>4. </span>Software Design</a>
+          <ol>
+            <li><a href="#software-design-uml-activity"><span>4.1. </span>UML Activity Diagram</a></li>
+            <li><a href="#software-design-use-case"><span>4.2. </span>UML Use Case Diagram</a></li>
+            <li><a href="#software-design-use-case"><span>4.3. </span>UML Sequence Diagram</a></li>
+          </ol>
+        </li>
+        <li><a href="#spqrql"><span>5. </span>SPARQL and Datasets</a>
+          <ol>
+            <li><a href="#sparql-subsection"><span>5.1. </span>SPARQL</a></li>
+            <li><a href="#sparql-query-subsection"><span>5.2. </span>Comunica query-sparql library</a></li>
+            <li><a href="#datasets"><span>5.2. </span>Datasets</a></li>
+            <li><a href="#sparql-endpoint"><span>5.2. </span>SPARLQ endpoint</a></li>
+          </ol>
+        </li>
+        <li><a href="#auth"><span>6. </span>Authentication and authorization</a>
+          <ol>
+            <li><a href="#auth-authentication"><span>6.1. </span>Authentication endpoints</a></li>
+            <li><a href="#auth-authentication"><span>6.2. </span>Authorization endpoints</a></li>\
+          </ol>  
+        </li>
       <dl>
         <dt>Authors</dt>
         <dd>
@@ -72,14 +104,159 @@
         </ul>
       </p>
     </section>
+
+    <section id="architecture">
+      <h2><span>3. </span>Arhitecture</h2>
+      <p>
+        Our application architecture will be described via the following diagrams:
+      </p>
+      <div style="display: flex; justify-content:center; align-items: center; flex-direction: column; ">
+        <img style="max-width: 100%" src="./diagrams/backend_architecture.png" />
+        <figcaption style="font-style: italic; margin-top: 12px;">Fig.1 - ODa Backend architecture</figcaption>
+      </div>
+      <p>For the backend we've decided to take a modular - microservice approach. This can help us develop the modules independently and integrate those together when they are done. Such approach
+        also helps us with the testing and allows each person responsible for the microservice to develop in the desired language without imposing it on the other developers. All the microservices
+      will be glued together with the help of an API Gateway. Diving deeper into each of the microservices :</p>
+      <ul>
+        <li>
+          <b>Authentication and authorization</b> - this microservice will be responsible for the authentication and authorization of the users. 
+           It will be implemented in Java using Spring Boot. The authorization will be done using the roles of the users.
+        </li>
+        <li>
+          <b>SPARQL Query Microservice</b> - this microservice will be responsible for the retrieval of the data from the SPARQL endpoint. 
+          It will be implemented in NodeJS. The data will be retrieved using the SPARQL queries written by the users.
+        </li>
+        <li>
+          <b>Sharing Visualization Microservice</b> - this microservice will be responsible for the sharing of the visualizations between users.
+        </li>
+      </ul>
+      <div style="display: flex; justify-content:center; align-items: center; flex-direction: column; ">
+        <img style="max-width: 100%" src="./diagrams/frontend_architecture.png" />
+        <figcaption style="font-style: italic; margin-top: 12px;">Fig.2 - ODa Frontend architecture</figcaption>
+      </div>
+      <p>For the frontend we've decided to use React as the frontend backbone because of the flexibility this library offers. With the help of React we can create SPA's that 
+        can easily act both as an application and a browser extension. Diving deeper into the React app, we can see the following modules
+      </p>
+      <ul>
+        <li>
+          <b>Client state management - Zustand</b> : Zustand is a state management library that is built on top of React.
+           It is very lightweight and easy to use. It is also very flexible and allows us to create our own state management system.
+        </li>
+        <li>
+          <b>Routing - react-router</b> : react-router is a routing library for React. It allows us to create routes and navigate between them.
+        </li>
+        <li>
+          <b>SparQL Queries - Comunica</b> : Comunica is a SPARQL query engine that can be used to query SPARQL endpoints.
+           It is very flexible and can be used in different environments.
+        </li>
+        <li>
+          <b>Charts - Recharts</b> : Recharts is a charting library for React. It is very flexible and allows us to create different types of charts.
+        </li>
+        <li>
+          <b>Visualizations: Recharts, React Chart js 2, Victory, Visx, Nivo</b> : We will use different charting libraries to create different types of charts or any other types of visualizations. 
+        </li>
+      </ul>
+    </section>
+
+    <section id="software-design">
+      <h2><span>4. </span>Software Design</h2>
+      <p>
+        We've designed a set of diagrams that will explain all the flow that the users can have within the application as well as how the modules of our application interact 
+        with each other and what's the sequence of the actions that the user can perform. 
+      </p>
+      <section id="software-design-uml-activity">
+        <h3><span>4.1 </span>UML Activity Diagram</h3>
+        <div style="display: flex; justify-content:center; align-items: center; flex-direction: column; ">
+          <img style="max-width: 90%" src="./diagrams/uml_activity_diagram.png" />
+          <figcaption style="font-style: italic; margin-top: 12px;">Fig.3 - ODa UML Activity Diagram</figcaption>
+        </div>
+        <p>
+          The activity diagram describes the flow of the user actions within the application in order of their execution. When the user will first enter the application he 
+          can directly input the SPARQL query in the query editor and execute it. After the query has been executed and the user received the data he can choose which columns he wants to
+          visualize and what type of visualization he wants to use. After the user has chosen the columns and the type of visualization he will see the visualization.
+          The user then can save the visualization if he wants to for later use, but in order to do that he will have to create an account. If the user already has an account he can login.
+          After the user has logged in he can save the visualization and use it later. The user can also share the visualization with other users. The user can view other user's visualizations
+          and use them for his own purposes if he has the permission to do so and the link to the visualization
+        </p>
+      </section>
+      <section id="software-design-use-case">
+        <h3><span>4.2 </span>UML Use Case Diagram</h3>
+        <div style="display: flex; justify-content:center; align-items: center; flex-direction: column;">
+          <img style="max-width: 90%" src="./diagrams/uml_use_case_diagram.png" />
+          <figcaption style="font-style: italic;margin-top: 12px;">Fig.4 - ODa UML Use Case Diagram</figcaption>
+        </div>
+        <p>
+          The use case diagram describes the users we will have in our application and the actions that they can perform. 
+          We will have 2 types of users: the users that are not logged in and the users that are logged in which are called unauthorised and authorised user.
+          Unauthorised users can perform the following actions
+          <ul>
+            <li>
+              Execute SPARQL queries
+            </li>
+            <li>
+              Visualize the data with the desired visualization and with the desired columns
+            </li>
+            <li>
+              Create an account
+            </li>
+            <li>
+              Login
+            </li>
+            <li>
+              View other user's visualizations if those are publicly available
+            </li>
+          </ul>
+          Authorised users can perform all the actions unauthorised can and also the following actions
+          <ul>
+            <li>
+              Save the visualizations
+            </li>
+            <li>
+              View saved visualizations
+            </li>
+            <li>
+              Share the visualizations with other users
+            </li>
+            <li>
+              View other user's visualizations if the user has the permission to view them
+            </li>
+        </p>
+      </section>
+      <section id="software-design-use-case">
+        <h3><span>4.3 </span>UML Sequence Diagram</h3>
+        <div style="display: flex; justify-content:center; align-items: center; flex-direction: column;">
+          <img style="max-width: 90%" src="./diagrams/uml_sequence_diagram.png" />
+          <figcaption style="font-style: italic; margin-top: 12px;">Fig.5 - ODa UML Sequence Diagram</figcaption>
+        </div>
+        <p>
+          The sequence diagram describes how modules interact with each other based on the user actions. ODa module represents the front-end application and is the only thing that the user interacts with.
+          The ODa module will send the SPARQL query to the SPARQL Query Microservice. The SPARQL Query Microservice will send the query to the SPARQL endpoint and will receive the data.
+          The SPARQL Query Microservice will send the data to the ODa module and the ODa module will display the data to the user. The user can then choose which columns he wants to visualize and what type of visualization he wants to use.
+          The ODa module within it will create the visualization and will show it to the user.
+          If the user wants to save the visualization he will have to create an account or login if he already has an account.
+          The ODa module will send the request to the Auth Microservice with the credentials the user entered.
+          The Auth Microservice will check if the user credentials are valid and will send back the response if the user is allowed to save the visualization.
+          If the user is allowed to save the visualization the ODa module will send the request to the Sharing Microservice with the data of the visualization.
+          The Sharing Microservice will save the visualization in the Database and will send back the response to the ODa module.
+          If the user wants to share the visualization with other users he will select which visualization he wants to share.
+          The ODa module will send the request to the Sharing Microservice with the data of the visualization.
+          The Sharing Microservice will change the permissions to the visualization and will send back the response to the ODa module.
+          If the user wants to view other user's visualizations he will enter the link of the visualization.
+          The ODa module will send the request to the Sharing Microservice with the link of the visualization.
+          The Sharing Microservice will check if the user has the permission to view the visualization and will send back the response to the ODa module.
+
+        </p>
+      </section>
+    </section>
+
     <section id="spqrql">
-      <h2><span>3. </span>SPQRQL and Datasets</h2>
+      <h2><span>5. </span>SPQRQL and Datasets</h2>
       <p>
         The application will be used by users to represent different kind of data in several types of charts. 
         The information is retireved via a SPARQL endpoint implemented in <a href="https://nodejs.org/en/">Node.js</a> from different open datasets.
       </p>
       <section id="sparql-subsection">
-        <h3><span>3.1 </span>SPAQRL</h3>
+        <h3><span>5.1 </span>SPAQRL</h3>
         <p>
           SPARQL is a <a href="https://www.w3.org/TR/sparql11-query/">query language</a> and a 
           <a href="https://www.w3.org/TR/rdf-sparql-protocol/">protocol</a> 
@@ -94,7 +271,7 @@
         </p>
       </section>
       <section id="sparql-query-subsection">
-        <h3><span>3.2 </span>Comunica query-sparql library</h3>
+        <h3><span>5.2 </span>Comunica query-sparql library</h3>
         <p>
           <a href="https://www.npmjs.com/package/@comunica/query-sparql">Comunica SPARQL</a> is a SPARQL query engine for 
           JavaScript for querying over decentralized RDF knowledge graphs on the Web.
@@ -113,7 +290,7 @@
         </p>
       </section>
       <section id="datasets">
-        <h3><span>3.3 </span>Datasets</h3>
+        <h3><span>5.3 </span>Datasets</h3>
         <p>
           In ODA, when an user wants to retireve data by writing an SPARQL query in the page query editor, they will be able 
           to specify which open dataset they target. Being a flexible application, user has the posibility to insert the link of
@@ -129,7 +306,7 @@
         </p>
       </section>
       <section id="sparql-endpoint">
-        <h3><span>3.4 </span>SPARLQ endpoint</h3>
+        <h3><span>5.4 </span>SPARLQ endpoint</h3>
         <p>
           In order to retireve data from chosen open dataset, the user has to write a SPQRQL query in the 
           query editor. When submitting the written query, an API call will be made by the front-end application.
@@ -183,7 +360,7 @@
       </section>
     </section>
     <section id="auth">
-      <h2><span>4. </span>Authentication and authorization</h2>
+      <h2><span>6. </span>Authentication and authorization</h2>
       <p>
         ODA application allows users to qury an open dataset via a SPARQL endpoint implemented in Node.js as described above. In order to perform 
         all specified actions, firstly they have to register in the application with an username and a password. Based on their credentials, 
@@ -192,7 +369,7 @@
         application: authentication, open datasets queries and authorization in order to perform different actions to an executed query.
       </p>
       <section id="auth-authentication">
-        <h3><span>4.1 </span>Authentication endpoints</h3>
+        <h3><span>6.1 </span>Authentication endpoints</h3>
           In order to save, update and delete or to share a SPARQL query, the users should have an account. For this part of the application 
           we will have an authentication microservice implemented in Java Spring Framework.
           For authentication there will be the following Java endpoints:
@@ -212,7 +389,7 @@
           </ul>
       </section>
       <section id="auth-authentication">
-        <h3><span>4.2 </span>Authorization endpoints</h3>
+        <h3><span>6.2 </span>Authorization endpoints</h3>
         Having an account, users are allowed to share their SPARQL queries and their visualization with other users on the platform.
         To do so, they must have the permission to share a specific query. This part of the application will be represented by another 
         microservice implemented in Java Spring Framework.
