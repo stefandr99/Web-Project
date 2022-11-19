@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Scholarly HTML</title>
+    <link rel="stylesheet" href="./scholarly.min.css">
+    <script src="./Scholarly HTML_files/scholarly.min.js.download"></script>
+  </head>
+  <body prefix="schema: http://schema.org" cz-shortcut-listen="true">
+    <header>
+      <h1>ODA Scholarly HTML</h1>
+    </header>
+    <div role="contentinfo"><ol role="directory"><li><a href="https://w3c.github.io/scholarly-html/#abstract"><span>1. </span>Abstract</a></li><li><a href="https://w3c.github.io/scholarly-html/#introduction"><span>2. </span>Introduction</a></li><li><a href="https://w3c.github.io/scholarly-html/#structure"><span>3. </span>SPARQL and Datasets</a><ol role="directory"><li><a href="https://w3c.github.io/scholarly-html/#Root"><span>3.1 </span>The root and <code>head</code></a></li><li><a href="https://w3c.github.io/scholarly-html/#article"><span>3.2 </span>The <code>article</code></a></li><li><a href="https://w3c.github.io/scholarly-html/#hunk"><span>3.3 </span>Hunk Elements</a></ol>
+      <dl>
+        <dt>Authors</dt>
+        <dd>
+          Nazar Fatichov,
+          Serghei Cunev 
+          &amp;
+          Ștefan Drăgoi
+        </dd>
+      </dl>
+    </div>
+    <section typeof="sa:Abstract" id="abstract" role="doc-abstract">
+      <h2><span>1. </span>Abstract</h2>
+      <p>
+        ODA (Open Dataset Visualizer) is a semantic web applicaton which has the purpose to represent data 
+        from open datasets in different forms. The main target of the application is to provide userful visualizations 
+        to end users in order to understand better data / information / knowledge. The system is designed to allow users 
+        to write a raw SPARQL queries, to specify which column of their representation they want to be included in the resulted 
+        chart and in what type of chart they want to be data represented.
+      </p>
+    </section>
+    <section id="introduction" role="doc-introduction">
+      <h2><span>2. </span>Introduction</h2>
+      <p>
+        Open Dataset Visualizer is a web application which will provide useful visualizations for better understanding of 
+        data retrieved via a SPARQL endpoint. In order to use ODA, users should create an account and based on their authorization they
+        will be allowed to perform different actions:
+        <ul>
+          <li>
+            write raw SPARQL queries in the application's query editor, choose which columns of retrieved data will be represented 
+            and what kind diagrams will represent the result;
+          </li>
+          <li>
+            save certain charts to be used later with other purposes;
+          </li>
+          <li>
+            update saved diagrams by adding, deleting, modifing columns / data source;
+          </li>
+          <li>
+            delete a saved representation associated with their account;
+          </li>
+          <li>
+            share a chart with another user; 
+          </li>
+        </ul>
+      </p>
+      <p>
+        The application is built in 3 modules (which will be described in the following document sections):
+        <ul>
+          <li>
+            Authentication and authorization web API;
+          </li>
+          <li>
+            SPQRQL data retrieving web API;
+          </li>
+          <li>
+            User interface and user experience: writing queries, visualize charts (represented data), save and 
+            share charts
+          </li>
+        </ul>
+      </p>
+    </section>
+    <section id="spqrql">
+      <h2><span>3. </span>SPQRQL and Datasets</h2>
+      <p>
+        The application will be used by users to represent different kind of data in several types of charts. 
+        The information is retireved via a SPARQL endpoint implemented in <a href="https://nodejs.org/en/">Node.js</a> from different open datasets.
+      </p>
+      <section id="sparql-subsection">
+        <h3><span>3.1 </span>SPAQRL</h3>
+        <p>
+          SPARQL is a <a href="https://www.w3.org/TR/sparql11-query/">query language</a> and a 
+          <a href="https://www.w3.org/TR/rdf-sparql-protocol/">protocol</a> 
+          for accessing RDF designed by <a href="https://www.w3.org/2009/sparql/wiki/Main_Page">W3C</a>. 
+        </p>
+        <p>
+          As a query language, SPARQL is “data-oriented” in that it only queries the information held in the models; 
+          there is no inference in the query language itself.  Of course, the Jena model may be ‘smart’ in that it 
+          provides the impression that certain triples exist by creating them on-demand, including OWL reasoning. 
+          SPARQL does not do anything other than take the description of what the application wants, in the form of a query, 
+          and returns that information, in the form of a set of bindings or an RDF graph. (Apache Jena)
+        </p>
+      </section>
+      <section id="sparql-query-subsection">
+        <h3><span>3.2 </span>Comunica query-sparql library</h3>
+        <p>
+          <a href="https://www.npmjs.com/package/@comunica/query-sparql">Comunica SPARQL</a> is a SPARQL query engine for 
+          JavaScript for querying over decentralized RDF knowledge graphs on the Web.
+          It's main distinguishing features are the following:
+          <ul>
+            <li>
+              Execute SPARQL 1.1 or GraphQL-LD queries;
+            </li>
+            <li>
+              Federated querying over heterogeneous interfaces, such as RDF files, SPARQL endpoints, Triple Pattern Fragments, or Solid data pods;
+            </li>
+            <li>
+              High modularity enabling easy extensions and customization.
+            </li>
+          </ul>
+        </p>
+      </section>
+      <section id="datasets">
+        <h3><span>3.3 </span>Datasets</h3>
+        <p>
+          In ODA, when an user wants to retireve data by writing an SPARQL query in the page query editor, they will be able 
+          to specify which open dataset they target. Being a flexible application, user has the posibility to insert the link of
+          the most used open datasets:
+          <ul>
+            <li>
+              <a href="https://www.dbpedia.org/">Dbpedia</a>
+            </li>
+            <li>
+              <a href="https://www.wikidata.org/wiki/Wikidata:Main_Page">Wikidata</a>
+            </li>
+          </ul>
+        </p>
+      </section>
+      <section id="sparql-endpoint">
+        <h3><span>3.4 </span>SPARLQ endpoint</h3>
+        <p>
+          In order to retireve data from chosen open dataset, the user has to write a SPQRQL query in the 
+          query editor. When submitting the written query, an API call will be made by the front-end application.
+          That API will execute the query on the specified open dataset and return the results in order to be 
+          represented in different ways in the page application.
+        </p>
+        <p>
+          The SPARQL endpoint is implemented in <a href="https://nodejs.org/en/">Node.js</a>, an open source server environment 
+          which uses JavaScript in the server. The endpoint will use <a href="https://expressjs.com/">ExpressJS</a>, a minimal 
+          and flexible <a href="https://nodejs.org/en/">Node.js</a> web application framework.
+        </p>
+        <p>
+          Instantiating a QueryEngine object 
+          <pre><code>const queryEngine = new QueryEngine();</code></pre>,
+          the <a href="https://nodejs.org/en/">Node.js</a> endpoint will query the specified open dataset to be returned 
+          to the front-end application and to be represented in order to be better understanted.
+        </p>
+        <p>
+          A piece of code exemplifying how <a href="https://www.npmjs.com/package/@comunica/query-sparql">Comunica query-sparkql</a>
+          executes an SPARQL query:
+
+          <pre><code>
+            const bindingsStream = await queryEngine.queryBindings(
+              `PREFIX dbo: <http://dbpedia.org/ontology/>
+              PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+              PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+              SELECT ?country ?city ?city_name ?country_name
+              WHERE {
+                  ?city rdf:type dbo:City ;
+                        foaf:name ?city_name ;
+                        dbo:country ?country ;
+                        dbo:populationTotal ?population ;
+                        ?country rdf:type dbo:Country ;
+                            foaf:name ?country_name .
+              
+                  ?country foaf:name \"Romania\"@en .
+              
+                  FILTER(langMatches(lang(?city_name), \"en\"))
+              }
+              ORDER BY ?city_name
+              LIMIT 100`,
+              {
+                sources: ['https://dbpedia.org/sparql'],
+              },
+            );
+          </code></pre>
+          Futher, the <code>bindingsStream</code> object method: <code>bindingsStream.get('columnName')</code> gets value for specified 
+          data column, in the end the endpoint returning all the  user's selected columns to the front-end application represents it 
+          in charts.
+        </p>
+      </section>
+    </section>
+    <section id="auth">
+      <h2><span>4. </span>Authentication and authorization</h2>
+      <p>
+        ODA application allows users to qury an open dataset via a SPARQL endpoint implemented in Node.js as described above. In order to perform 
+        all specified actions, firstly they have to register in the application with an username and a password. Based on their credentials, 
+        the users will be allowed to save and update an SPARQL query or to share a query with another application user.
+        As it can be seen in the project architecture presented above, there will be implementend three microservice for every section of the 
+        application: authentication, open datasets queries and authorization in order to perform different actions to an executed query.
+      </p>
+      <section id="auth-authentication">
+        <h3><span>4.1 </span>Authentication endpoints</h3>
+          In order to save, update and delete or to share a SPARQL query, the users should have an account. For this part of the application 
+          we will have an authentication microservice implemented in Java Spring Framework.
+          For authentication there will be the following Java endpoints:
+          <ul>
+            <li>
+              POST: <b>auth/user</b> - create an user account
+            </li>
+            <li>
+              GET: <b>auth/user/{id}</b> - get user account by id
+            </li>
+            <li>
+              PUT: <b>auth/user/{id}</b> - update an user credentials 
+            </li>
+            <li>
+              DELETE: <b>auth/user/{id}</b> - delete an user account
+            </li>
+          </ul>
+      </section>
+      <section id="auth-authentication">
+        <h3><span>4.2 </span>Authorization endpoints</h3>
+        Having an account, users are allowed to share their SPARQL queries and their visualization with other users on the platform.
+        To do so, they must have the permission to share a specific query. This part of the application will be represented by another 
+        microservice implemented in Java Spring Framework.
+        For authorization there will be the following Java endpoints:
+        <ul>
+          <li>
+            POST: <b>auth/access</b> - create a permission for a specific query
+          </li>
+          <li>
+            GET: <b>auth/access/{userId}</b> - get all user's query list by user id
+          </li>
+          <li>
+            PUT: <b>auth/user/{userId}</b> - update permissions for a query 
+          </li>
+          <li>
+            DELETE: <b>auth/user/{userId}/{queryId}</b> - delete an user's query 
+          </li>
+        </ul>
+      </section>
+    </section>
