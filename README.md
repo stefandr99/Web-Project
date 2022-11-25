@@ -7,7 +7,7 @@ Project for Web Development, second year Master's subject, made by
 
 # Resources
 - [Scholarly HTML Report](https://zippy-bunny-d0202d.netlify.app/)
-- [Open API Specification](https://khan.github.io/KaTeX/)
+- [Open API Specification](https://gleaming-scone-991ac3.netlify.app/)
 
 # Blog with the progress
 
