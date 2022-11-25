@@ -6,7 +6,7 @@ Project for Web Development, second year Master's subject, made by
 - Fatikhov Nazar
 
 # Resources
-- [Scholarly HTML Report](https://khan.github.io/KaTeX/)
+- [Scholarly HTML Report](https://zippy-bunny-d0202d.netlify.app/)
 - [Open API Specification](https://khan.github.io/KaTeX/)
 
 # Blog with the progress
