@@ -10,13 +10,13 @@ function App() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex w-screen flex-col h-screen bg-[#1F1F1F]">
-      <div className="h-[800px] pt-24 pb-16 flex px-36">
+    <div className="flex w-full flex-col flex-grow h-full bg-[#1F1F1F]">
+      <div className="pt-12 pb-16 h-full px-16">
         <Routes>
           <Route
             path="/"
             element={
-              <div className="text-white text-3xl font-bold">
+              <div className="text-white text-3xl font-bold w-full">
                 <h1>Open Data Visualizer</h1>
                 <QueryInput />
               </div>

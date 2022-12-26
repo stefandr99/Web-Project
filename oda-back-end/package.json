@@ -12,6 +12,7 @@
   "dependencies": {
     "@comunica/query-sparql": "^2.5.0",
     "apollo-server-express": "^3.11.1",
+    "cors": "^2.8.5",
     "graphql-ld": "^1.4.1"
   }
 }

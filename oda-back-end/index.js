@@ -3,46 +3,66 @@ const QueryEngine = require('@comunica/query-sparql').QueryEngine;
 
 const app = express();
 const myEngine = new QueryEngine();
+var cors = require('cors')
+
+app.use(cors())
+
+app.use(express.json());
+
+
 
 app.get('/', async (req, res) => {
   const bindingsStream = await myEngine.queryBindings(
     `PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-    SELECT ?country ?city ?city_name ?country_name
+
+    SELECT ?country ?population
     WHERE {
-        ?city rdf:type dbo:City ;
-              foaf:name ?city_name ;
-              dbo:country ?country ;
-              dbo:populationTotal ?population ;
-              ?country rdf:type dbo:Country ;
-                  foaf:name ?country_name .
-    
-        ?country foaf:name \"Romania\"@en .
-    
-        FILTER(langMatches(lang(?city_name), \"en\"))
+        ?country a dbo:Country ;
+                dbo:populationTotal ?population ;
+                dbo:abstract ?abstract .
     }
-    ORDER BY ?city_name
-    LIMIT 100`,
+    GROUP BY ?country ?population`,
     {
       sources: ['https://dbpedia.org/sparql'],
     },
   );
 
-  //SPARQL FOR DBPEDIA TO GET COUNTRY POPULATION
-
   const result = [];
 
   bindingsStream.on('data', (binding) => {
-    result.push({
-      x: binding.get('country_name').value,
-      value: binding.get('city_name').value,
-    });
+    result.push(binding);
   });
 
   bindingsStream.on('end', () => {
     res.send(result);
   });
 });
+
+
+app.post('/sparql', async (req, res) => {
+
+  console.log(req.body.query);
+
+  const result = await myEngine.query(
+    req.body.query,
+    {
+      sources: [req.body.source],
+    },
+  );
+
+  const {data} = await myEngine.resultToString(result, 'table');
+
+  res.send(data);
+  
+
+  // bindingsStream.on('data', (binding) => {
+  //   result.push(binding);
+  // });
+
+  // bindingsStream.on('end', () => {
+  //   res.send(result);
+  // });
+});
+
 
 app.listen({ port: 4000 }, () => console.log(`🚀 Server ready at http://localhost:4000`));

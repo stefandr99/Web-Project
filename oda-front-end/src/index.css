@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+#root {
+    width: 100vw;
+    height: 100vh;
+    background-color: #1F1F1F;
+    overflow: auto;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
