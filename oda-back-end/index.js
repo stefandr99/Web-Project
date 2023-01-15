@@ -1,15 +1,18 @@
+require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const AuthRouter = require('./routes/auth.js');
 const QueryEngine = require('@comunica/query-sparql').QueryEngine;
-
+const mongoose = require('./db/connect.js');
 const app = express();
 const myEngine = new QueryEngine();
-var cors = require('cors')
-
-app.use(cors())
 
 app.use(express.json());
-
-
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(morgan('tiny'));
+app.use('/auth',AuthRouter);
 
 app.get('/', async (req, res) => {
   const bindingsStream = await myEngine.queryBindings(
@@ -27,10 +30,15 @@ app.get('/', async (req, res) => {
     },
   );
 
+  //SPARQL FOR DBPEDIA TO GET COUNTRY POPULATION
+
   const result = [];
 
   bindingsStream.on('data', (binding) => {
-    result.push(binding);
+    result.push({
+      x: binding.get('country').value,
+      value: binding.get('population').value,
+    });
   });
 
   bindingsStream.on('end', () => {
@@ -38,31 +46,4 @@ app.get('/', async (req, res) => {
   });
 });
 
-
-app.post('/sparql', async (req, res) => {
-
-  console.log(req.body.query);
-
-  const result = await myEngine.query(
-    req.body.query,
-    {
-      sources: [req.body.source],
-    },
-  );
-
-  const {data} = await myEngine.resultToString(result, 'table');
-
-  res.send(data);
-  
-
-  // bindingsStream.on('data', (binding) => {
-  //   result.push(binding);
-  // });
-
-  // bindingsStream.on('end', () => {
-  //   res.send(result);
-  // });
-});
-
-
-app.listen({ port: 4000 }, () => console.log(`🚀 Server ready at http://localhost:4000`));
+app.listen({ port: process.env.PORT }, () => console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`));
