@@ -4,6 +4,7 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import QueryInput from './components/QueryInput';
+import QueryPage from './components/QueryPage';
 
 function App() {
   const [currentlyOpenedMovie, setCurrentlyOpenedMovie] = useState<any>({});
@@ -16,9 +17,9 @@ function App() {
           <Route
             path="/"
             element={
-              <div className="text-white text-3xl font-bold w-full">
+              <div className="text-white text-3xl max-h-full font-bold w-full">
                 <h1>Open Data Visualizer</h1>
-                <QueryInput />
+                <QueryPage />
               </div>
             }
           ></Route>

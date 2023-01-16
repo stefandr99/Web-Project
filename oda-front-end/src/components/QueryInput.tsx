@@ -1,17 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import Yasgui from "@triply/yasgui";
 import "@triply/yasgui/build/yasgui.min.css";
 import CodeMirror from '@uiw/react-codemirror';
 import { StreamLanguage } from '@codemirror/language';
 import { sparql } from '@codemirror/legacy-modes/mode/sparql';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { executeSparqlQuery } from '../services/query';
+import { useApplicationStore } from '../useApplicationStore';
 
 
 
 const QueryInput = () => {
-  const [dbsource, setdbSource] = useState<any>('')
-  const [query, setQuery] = useState<string>('')
+  const [dbsource, setdbSource] = useState<any>('http://dbpedia.org/sparql')
+  const [query, setQuery] = useState<string>(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX yago: <http://dbpedia.org/class/yago/>
+  PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+  
+  SELECT ?pref ?area
+  WHERE {
+    ?s a yago:WikicatPrefecturesOfJapan ;
+       rdfs:label ?pref ;
+       dbpedia-owl:areaTotal ?area_total .
+    FILTER (lang(?pref) = 'en')
+    BIND ((?area_total / 1000 / 1000) AS ?area)
+  }
+  ORDER BY DESC(?area)`)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const nextStep = useApplicationStore((state) => state.nextStep)
+  const setData = useApplicationStore((state) => state.setDataResult)
+
+  function runQuery() {
+    executeSparqlQuery(query, dbsource)
+      .then((response) => {
+
+        if(response && response.data){
+          setData(response.data)
+          nextStep()
+        }
+        
+    }).catch((error) => {})
+  }
 
   const onChange = React.useCallback((value : any) => {
     setQuery(value)
@@ -20,6 +48,10 @@ const QueryInput = () => {
   useEffect(() => {
     return () => { };
   }, []);
+
+  if(isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className=" pb-16 w-full h-full">
@@ -33,7 +65,7 @@ const QueryInput = () => {
         </div>
         <button
           className='text-xl bg-orange-500 hover:bg-orange-600 transition-all ease-in-out duration-150 px-4 py-2 rounded-xl'
-          onClick={() => { executeSparqlQuery(query,dbsource) }}>
+          onClick={() => { runQuery() }}>
           Run
         </button>
       </div>
