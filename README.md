@@ -14,9 +14,13 @@ Project for Web Development, second year Master's subject, made by
 ## Week 13
 
 > Added the code editor inside the app to highlight syntax
+
 > Added route on the server for d3-sparql
+
 > Making call from front-end to route
+
 > Added data in table for visualization
+
 > Creating a small bar-chart from data
 
 ## Week 12
@@ -26,6 +30,7 @@ Project for Web Development, second year Master's subject, made by
 ## Week 11
 
 > Realized that Communica library is not what we need, and after a throughly reading and research of both the courses and the web found some better alternatives. Those being : d3-sparql, d3sparql, Sgvizler and rdf2rml
+
 > Doing research on those libraries and potential implementations
 
 ## Week 10
