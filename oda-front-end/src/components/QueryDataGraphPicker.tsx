@@ -7,7 +7,7 @@ function QueryDataGraphPicker() {
     const setGraphicType = useApplicationStore((state) => state.setChoosenGraphicType)
 
     function generateGraphic(graphicType: string) {
-        setGraphicType('barChart')
+        setGraphicType(graphicType)
         nextStep()
     }
 
@@ -27,6 +27,14 @@ function QueryDataGraphPicker() {
                             <img src='https://www.svgrepo.com/show/99962/bar-chart.svg' />
                         </div>
                         Bar Chart
+                    </div>
+                </div>
+                <div>
+                    <div onClick={()=>{generateGraphic('pieChart')}} className=' text-[#1a1a1a] border-4 text-2xl flex flex-col items-center justify-center border-[#1a1a1a] bg-slate-200 rounded-2xl h-56 w-56'>
+                        <div className='w-32 h-32'>
+                            <img src='https://www.svgrepo.com/show/99962/bar-chart.svg' />
+                        </div>
+                         Pie Chart
                     </div>
                 </div>
             </div>

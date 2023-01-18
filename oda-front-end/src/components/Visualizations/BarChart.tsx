@@ -2,8 +2,7 @@ import * as d3 from 'd3';
 import { useEffect, useRef } from 'react';
 import { useApplicationStore } from '../../useApplicationStore';
 
-const BarChart = () => {
-    const data : any[] = useApplicationStore((state) => state.dataResult)
+const BarChart = ({data}: any) => {
 
     const svgRef = useRef(null);
     useEffect(() => {
@@ -16,7 +15,7 @@ const BarChart = () => {
         const g = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        x.domain(data.map(d => d.pref));
+        x.domain(data.map((d:any) => d.pref));
         //@ts-ignore
         y.domain([0, d3.max(data, d => d.area)]);
 
@@ -47,9 +46,9 @@ const BarChart = () => {
                     //@ts-ignore
 
             .attr("x", d => x(d.pref))
-            .attr("y", d => y(d.area))
+            .attr("y", (d:any) => y(d.area))
             .attr("width", x.bandwidth())
-            .attr("height", d => height - y(d.area));
+            .attr("height", (d : any) => height - y(d.area));
     }, [data])
 
     return (
