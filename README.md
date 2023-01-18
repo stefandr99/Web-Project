@@ -11,6 +11,34 @@ Project for Web Development, second year Master's subject, made by
 
 # Blog with the progress
 
+## Week 13
+
+> Added the code editor inside the app to highlight syntax
+
+> Added route on the server for d3-sparql
+
+> Making call from front-end to route
+
+> Added data in table for visualization
+
+> Creating a small bar-chart from data
+
+## Week 12
+
+>Added auth module with mongo and JWT token and routes on the server
+
+## Week 11
+
+> Realized that Communica library is not what we need, and after a throughly reading and research of both the courses and the web found some better alternatives. Those being : d3-sparql, d3sparql, Sgvizler and rdf2rml
+
+> Doing research on those libraries and potential implementations
+
+## Week 10
+
+> Research in D3.js and how to use it
+
+> Research in combination of D3 and React
+
 ## Week 09
 
 > Second of the Open API
