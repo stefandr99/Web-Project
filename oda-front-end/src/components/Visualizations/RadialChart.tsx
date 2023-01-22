@@ -1,9 +1,21 @@
 import React, { useState } from "react";
 import * as d3 from "d3";
-import { ResponsiveContainer, Tooltip, PieChart, Pie } from "recharts";
-import { TransferList, TransferListData } from "@mantine/core";
+import {
+  RadialBarChart,
+  RadialBar,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-export function PieChartVisualization({ data, outerRadius, innerRadius }: any) {
+import { TransferList, TransferListData } from "@mantine/core";
+const style = {
+  top: "50%",
+  right: 0,
+  transform: "translate(0, -50%)",
+  lineHeight: "24px",
+};
+
+export function RadialChartVisualization({ data }: any) {
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
   const [transferData, setTransferData] = useState<TransferListData>([
     keys.splice(0, 1),
@@ -24,21 +36,28 @@ export function PieChartVisualization({ data, outerRadius, innerRadius }: any) {
       />
 
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart width={1000} height={1000}>
+        <RadialBarChart
+          cx="50%"
+          cy="50%"
+          innerRadius="10%"
+          outerRadius="80%"
+          barSize={10}
+          data={data}
+        >
           {transferData[1].map((datakey) => (
-            <Pie
-              data={data}
-              nameKey={transferData[0][0].value}
+            <RadialBar
+              label={{ position: "insideStart", fill: "#fff" }}
+              background
               dataKey={datakey.value}
-              cx="50%"
-              cy="50%"
-              outerRadius={300}
-              fill="#8884d8"
-              label
+              // @ts-ignore
+              nameKey={transferData[0][0].label}
+              // @ts-ignore
+              clockWise
+              // @ts-ignore
+              minAngle={15}
             />
           ))}
-          <Tooltip />
-        </PieChart>
+        </RadialBarChart>
       </ResponsiveContainer>
     </div>
   );

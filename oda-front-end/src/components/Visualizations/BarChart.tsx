@@ -1,59 +1,72 @@
-import * as d3 from 'd3';
-import { useEffect, useRef } from 'react';
-import { useApplicationStore } from '../../useApplicationStore';
+import { TransferList, TransferListData } from "@mantine/core";
+import { useState } from "react";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+} from "recharts";
 
-const BarChart = ({data}: any) => {
+export const BarChartVisualization = ({ data }: any) => {
+  const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
+  const [transferData, setTransferData] = useState<TransferListData>([
+    keys.splice(0, 1),
+    keys,
+  ]);
 
-    const svgRef = useRef(null);
-    useEffect(() => {
-        const svg = d3.select(svgRef.current);
-        const margin = { top: 20, right: 20, bottom: 120, left: 40 };
-        const width = +svg.attr("width") - margin.left - margin.right;
-        const height = +svg.attr("height") - margin.top - margin.bottom;
-        const x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
-        const y = d3.scaleLinear().rangeRound([height, 0]);
-        const g = svg.append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+  return (
+    <div className="w-full h-[400px] text-black text-xs pt-5">
+      <TransferList
+        style={{ color: "white" }}
+        value={transferData}
+        onChange={setTransferData}
+        searchPlaceholder="Search..."
+        nothingFound="Nothing here"
+        titles={["X Axis", "Y Axis"]}
+        breakpoint="sm"
+        mb={20}
+      />
 
-        x.domain(data.map((d:any) => d.pref));
-        //@ts-ignore
-        y.domain([0, d3.max(data, d => d.area)]);
+      <ResponsiveContainer width="100%" height={350}>
+        <ComposedChart
+          width={400}
+          height={400}
+          data={data}
+          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+        >
+          {transferData[0].map((datakey) => (
+            <XAxis dataKey={datakey.value} />
+          ))}
 
-        g.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", `translate(0,${height})`)
-        //@ts-ignore
-        .call(d3.axisBottom(x).tickSizeOuter(0).tickFormat(d => d).tickSize(0).tickPadding(10).tickValues(data.map(d => d.pref)))
-        .selectAll("text")  
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
-            .attr("transform", "rotate(-65)");
+          <Tooltip />
+          <CartesianGrid stroke="#f5f5f5" />
 
-        g.append("g")
-            .attr("class", "axis axis--y")
-            //@ts-ignore
-            .call(d3.axisLeft(y).ticks(10))
-            .append("text")
-            .attr("y", 6)
-            .attr("text-anchor", "end")
-            .text("Area");
-
-        g.selectAll(".bar")
-            .data(data)
-            .enter().append("rect")
-            .attr("class", "bar")
-                    //@ts-ignore
-
-            .attr("x", d => x(d.pref))
-            .attr("y", (d:any) => y(d.area))
-            .attr("width", x.bandwidth())
-            .attr("height", (d : any) => height - y(d.area));
-    }, [data])
-
-    return (
-        <svg ref={svgRef} width={1600} height={600} />
-    );
-}
-
-export default BarChart;
+          {transferData[1].map((datakey) => (
+            <Line
+              type="monotone"
+              dataKey={datakey.value}
+              stroke="#ff7300"
+              yAxisId={0}
+            />
+          ))}
+        </ComposedChart>
+      </ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={350}>
+        <ComposedChart
+          width={400}
+          height={400}
+          data={data}
+          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+        >
+          <XAxis dataKey="pref" />
+          <Tooltip />
+          <CartesianGrid stroke="#f5f5f5" />
+          <Bar type="monotone" dataKey="area" fill="#4186EA" yAxisId={0} />
+        </ComposedChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};

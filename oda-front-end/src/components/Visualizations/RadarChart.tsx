@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import * as d3 from "d3";
-import { ResponsiveContainer, Tooltip, PieChart, Pie } from "recharts";
+import {
+  ResponsiveContainer,
+  Tooltip,
+  Pie,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+} from "recharts";
 import { TransferList, TransferListData } from "@mantine/core";
 
-export function PieChartVisualization({ data, outerRadius, innerRadius }: any) {
+export function RadarChartVisualization({ data }: any) {
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
   const [transferData, setTransferData] = useState<TransferListData>([
     keys.splice(0, 1),
@@ -24,21 +32,21 @@ export function PieChartVisualization({ data, outerRadius, innerRadius }: any) {
       />
 
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart width={1000} height={1000}>
+        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey={transferData[0][0].label} />
+          <PolarRadiusAxis />
           {transferData[1].map((datakey) => (
-            <Pie
-              data={data}
-              nameKey={transferData[0][0].value}
-              dataKey={datakey.value}
-              cx="50%"
-              cy="50%"
-              outerRadius={300}
+            <Radar
+              dataKey={datakey.label}
+              stroke="#8884d8"
               fill="#8884d8"
-              label
+              fillOpacity={0.6}
             />
           ))}
+
           <Tooltip />
-        </PieChart>
+        </RadarChart>
       </ResponsiveContainer>
     </div>
   );
