@@ -6,7 +6,7 @@ const d3 = require('d3-sparql');
 const AuthRouter = require('./routes/auth.js');
 const SPARQLRouter = require('./routes/sparql.js');
 const QueryEngine = require('@comunica/query-sparql').QueryEngine;
-// const mongoose = require('./db/connect.js');
+const mongoose = require('./db/connect.js');
 const app = express();
 const myEngine = new QueryEngine();
 
