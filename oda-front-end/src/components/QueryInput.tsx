@@ -43,12 +43,16 @@ const QueryInput = () => {
 
   const nextStep = useApplicationStore((state) => state.nextStep);
   const setData = useApplicationStore((state) => state.setDataResult);
+  const setGPTSuggestion = useApplicationStore(
+    (state) => state.setGPTSuggestion
+  );
 
   function runQuery() {
     executeSparqlQuery(query, dbsource)
       .then((response) => {
         if (response && response.data) {
-          setData(response.data);
+          setGPTSuggestion(response.data.graphSuggestion);
+          setData(response.data.data);
           nextStep();
         }
       })

@@ -31,6 +31,7 @@ const graphTypes: GraphType[] = [
 
 function QueryDataGraphPicker() {
   const dataResult = useApplicationStore((state) => state.dataResult);
+  const gptSuggestion = useApplicationStore((state) => state.gptSuggestion);
   const nextStep = useApplicationStore((state) => state.nextStep);
   const setGraphicType = useApplicationStore(
     (state) => state.setChoosenGraphicType
@@ -65,6 +66,8 @@ function QueryDataGraphPicker() {
             </div>
           ))}
         </div>
+        <div className="text-3xl mt-10">Language Model Analysis</div>
+        <div className="text-lg w-[800px] mt-5">{gptSuggestion}</div>
       </div>
       <div className="max-h-[600px] w-[500px] overflow-auto">
         <table>
