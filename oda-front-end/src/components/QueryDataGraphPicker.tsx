@@ -107,7 +107,7 @@ function QueryDataGraphPicker() {
                     {gtype.description}
                   </Text>
 
-                  <Button onClick={()=>{generateGraphic(gtype.value);}} variant="light" color="blue" fullWidth mt="md" radius="md">
+                  <Button onClick={()=>{generateGraphic(gtype.value);}} fullWidth mt="md" radius="md">
                     Choose
                   </Button>
                 </Card>
