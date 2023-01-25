@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const d3 = require('d3-sparql');
 const AuthRouter = require('./routes/auth.js');
+const UserRouter = require('./routes/user.js');
 const SPARQLRouter = require('./routes/sparql.js');
 const QueryEngine = require('@comunica/query-sparql').QueryEngine;
 const mongoose = require('./db/connect.js');
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('tiny'));
 app.use('/auth',AuthRouter);
+app.use('/user',UserRouter);
 app.use('/sparql',SPARQLRouter);
 
 
