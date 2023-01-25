@@ -5,6 +5,7 @@ import {
   RadialBar,
   Legend,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 
 import { MultiSelect, TransferList, TransferListData } from "@mantine/core";
@@ -66,6 +67,7 @@ export function RadialChartVisualization({ data }: any) {
               minAngle={15}
             />
           ))}
+        <Tooltip label={(e:any)=>{return e.name}}/>
         </RadialBarChart>
       </ResponsiveContainer>
     </div>

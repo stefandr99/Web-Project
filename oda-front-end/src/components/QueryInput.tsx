@@ -6,6 +6,7 @@ import { sparql } from "@codemirror/legacy-modes/mode/sparql";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
 import { executeSparqlQuery } from "../services/query";
 import { useApplicationStore } from "../useApplicationStore";
+import { Button, Input, LoadingOverlay } from "@mantine/core";
 
 const QueryInput = () => {
   const [dbsource, setdbSource] = useState<any>("http://togostanza.org/sparql");
@@ -48,6 +49,7 @@ const QueryInput = () => {
   );
 
   function runQuery() {
+    setIsLoading(true);
     executeSparqlQuery(query, dbsource)
       .then((response) => {
         if (response && response.data) {
@@ -56,37 +58,41 @@ const QueryInput = () => {
           nextStep();
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setIsLoading(false);
+      });
   }
 
   const onChange = React.useCallback((value: any) => {
     setQuery(value);
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className=" pb-16 w-full h-full">
       <div className="flex justify-between py-8">
-        <div className="w-1/2">
-          <input
+        <div className="w-1/2 relative">
+          <Input
+          disabled={isLoading}
+            color="orange"
+            placeholder="Your email"
             defaultValue={dbsource}
             onChange={(e) => setdbSource(e.target.value)}
-            className="bg-[#1a1a1a] text-sm py-2 px-2 w-full border-black border-[1px] rounded-lg"
-          ></input>
+            size="sm"
+          />
         </div>
-        <button
-          className="text-xl bg-orange-500 hover:bg-orange-600 transition-all ease-in-out duration-150 px-4 py-2 rounded-xl"
+        <Button
+          disabled={isLoading}
+          color="orange" radius="md" size="md"
+          variant="gradient" gradient={{ from: 'orange', to: 'red' }}
           onClick={() => {
             runQuery();
           }}
         >
           Run
-        </button>
+        </Button>
       </div>
-      <div className="text-xs rounded-md overflow-hidden">
+      <div className="text-xs rounded-md overflow-hidden relative">
+        <LoadingOverlay visible={isLoading} overlayBlur={2} />
         <CodeMirror
           theme={okaidia}
           value={query}

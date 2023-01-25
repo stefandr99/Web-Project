@@ -4,6 +4,7 @@ import { useApplicationStore } from "../useApplicationStore";
 import QueryDataGraphPicker from "./QueryDataGraphPicker";
 import QueryInput from "./QueryInput";
 import { BarChartVisualization } from "./Visualizations/BarChart";
+import { LineChartVisualization } from "./Visualizations/LineChart";
 import { PieChartVisualization } from "./Visualizations/PieChart";
 import { RadarChartVisualization } from "./Visualizations/RadarChart";
 import { RadialChartVisualization } from "./Visualizations/RadialChart";
@@ -43,6 +44,8 @@ function ChartRenderer() {
 
     case "radialChart":
       return <RadialChartVisualization data={data} />;
+    case "lineChart":
+      return <LineChartVisualization data={data}/>;
     default:
       return <>Unknown Chart Type</>;
   }

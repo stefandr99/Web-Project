@@ -9,17 +9,18 @@ import {
   PolarRadiusAxis,
   Radar,
 } from "recharts";
-import { MultiSelect, TransferList, TransferListData } from "@mantine/core";
+import { MultiSelect, TransferList, TransferListData, useMantineTheme } from "@mantine/core";
 import { DataExporter } from "../DataExporter";
 
 export function RadarChartVisualization({ data }: any) {
+  const theme = useMantineTheme();
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
   const [entryValues, setEntryValues] = useState<string[]>([]);
   const [outValues, setOutValues] = useState<string[]>([]);
 
   return (
     <div className="w-full h-[700px] text-black text-xs pt-5">
-      <div className="flex gap-5 mb-10">
+      <div className="flex items-center gap-5 mb-10">
         <MultiSelect
           data={keys}
           value={entryValues}
@@ -38,7 +39,10 @@ export function RadarChartVisualization({ data }: any) {
           label="Y Axis"
           placeholder="Pick all that you like"
         />
+        <div className="mt-5">
+
         <DataExporter data={data} />
+        </div>
       </div>
 
       <ResponsiveContainer width="100%" height="100%">
@@ -49,8 +53,8 @@ export function RadarChartVisualization({ data }: any) {
           {outValues.map((datakey) => (
             <Radar
               dataKey={datakey}
-              stroke="#8884d8"
-              fill="#8884d8"
+              stroke={theme.colorScheme ==="dark"?"white":"black"}
+              fill={"#e8590c"}
               fillOpacity={0.6}
             />
           ))}

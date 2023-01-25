@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { DataExporter } from "../DataExporter";
 
-export const BarChartVisualization = ({ data }: any) => {
+export const LineChartVisualization = ({ data }: any) => {
   const theme = useMantineTheme();
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
   const [entryValues, setEntryValues] = useState<string[]>([]);
@@ -40,6 +40,7 @@ export const BarChartVisualization = ({ data }: any) => {
         />
         <DataExporter data={data} />
       </div>
+
       <ResponsiveContainer width="100%" height={350}>
         <ComposedChart
           width={400}
@@ -50,14 +51,15 @@ export const BarChartVisualization = ({ data }: any) => {
           {entryValues.map((datakey) => (
             <XAxis dataKey={datakey} />
           ))}
+
           <Tooltip />
           <CartesianGrid stroke={theme.colorScheme ==="dark"?"white":"black"} />
+
           {outValues.map((datakey) => (
-            <Bar
+            <Line
               type="monotone"
               dataKey={datakey}
               stroke="#ff7300"
-              fill="#ff7300"
               yAxisId={0}
             />
           ))}

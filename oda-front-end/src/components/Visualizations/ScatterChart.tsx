@@ -25,7 +25,7 @@ export function ScatterChartVisualization({ data }: any) {
 
   return (
     <div className="w-full h-[700px] text-black text-xs pt-5">
-      <div className="flex gap-5 mb-10">
+      <div className="flex items-center gap-5 mb-10">
         <MultiSelect
           data={keys}
           value={entryValues}
@@ -44,7 +44,10 @@ export function ScatterChartVisualization({ data }: any) {
           label="Y Axis"
           placeholder="Pick all that you like"
         />
+        <div className="mt-5">
         <DataExporter data={data} />
+
+        </div>
       </div>
 
       <ResponsiveContainer width="100%" height="100%">
@@ -73,7 +76,7 @@ export function ScatterChartVisualization({ data }: any) {
           )}
 
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-          <Scatter name="A school" data={data} fill="#8884d8" />
+          <Scatter name="A school" data={data} fill="#fd7e14" />
         </ScatterChart>
       </ResponsiveContainer>
     </div>
