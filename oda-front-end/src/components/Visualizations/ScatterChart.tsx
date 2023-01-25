@@ -15,27 +15,37 @@ import {
   Scatter,
   ZAxis,
 } from "recharts";
-import { TransferList, TransferListData } from "@mantine/core";
+import { MultiSelect } from "@mantine/core";
+import { DataExporter } from "../DataExporter";
 
 export function ScatterChartVisualization({ data }: any) {
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
-  const [transferData, setTransferData] = useState<TransferListData>([
-    keys.splice(0, 1),
-    keys,
-  ]);
+  const [entryValues, setEntryValues] = useState<string[]>([]);
+  const [outValues, setOutValues] = useState<string[]>([]);
 
   return (
     <div className="w-full h-[700px] text-black text-xs pt-5">
-      <TransferList
-        style={{ color: "white" }}
-        value={transferData}
-        onChange={setTransferData}
-        searchPlaceholder="Search..."
-        nothingFound="Nothing here"
-        titles={["Label Value (only one)", "Selected Values (min 2, max 3)"]}
-        breakpoint="sm"
-        mb={20}
-      />
+      <div className="flex gap-5 mb-10">
+        <MultiSelect
+          data={keys}
+          value={entryValues}
+          onChange={(evt) => {
+            setEntryValues(evt);
+          }}
+          label="X Axis"
+          placeholder="Pick all that you like"
+        />
+        <MultiSelect
+          data={keys}
+          value={outValues}
+          onChange={(evt) => {
+            setOutValues(evt);
+          }}
+          label="Y Axis"
+          placeholder="Pick all that you like"
+        />
+        <DataExporter data={data} />
+      </div>
 
       <ResponsiveContainer width="100%" height="100%">
         <ScatterChart
@@ -47,36 +57,16 @@ export function ScatterChartVisualization({ data }: any) {
           }}
         >
           <CartesianGrid />
-          {transferData[1].length == 2 ? (
+          {outValues.length == 2 ? (
             <>
-              <XAxis
-                type="number"
-                dataKey={transferData[1][0].label}
-                name={transferData[1][0].label}
-              />
-              <YAxis
-                type="number"
-                dataKey={transferData[1][1].label}
-                name={transferData[1][1].label}
-              />
+              <XAxis type="number" dataKey={outValues[0]} name={outValues[0]} />
+              <YAxis type="number" dataKey={outValues[1]} name={outValues[1]} />
             </>
-          ) : transferData[1].length == 3 ? (
+          ) : outValues.length == 3 ? (
             <>
-              <XAxis
-                type="number"
-                dataKey={transferData[1][0].label}
-                name={transferData[1][0].label}
-              />
-              <YAxis
-                type="number"
-                dataKey={transferData[1][1].label}
-                name={transferData[1][1].label}
-              />
-              <ZAxis
-                type="number"
-                dataKey={transferData[1][2].label}
-                name={transferData[1][2].label}
-              />
+              <XAxis type="number" dataKey={outValues[0]} name={outValues[0]} />
+              <YAxis type="number" dataKey={outValues[1]} name={outValues[1]} />
+              <ZAxis type="number" dataKey={outValues[2]} name={outValues[2]} />
             </>
           ) : (
             <></>

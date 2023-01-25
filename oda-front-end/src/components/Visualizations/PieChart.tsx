@@ -1,35 +1,45 @@
 import React, { useState } from "react";
 import * as d3 from "d3";
 import { ResponsiveContainer, Tooltip, PieChart, Pie } from "recharts";
-import { TransferList, TransferListData } from "@mantine/core";
+import { MultiSelect, TransferList, TransferListData } from "@mantine/core";
+import { DataExporter } from "../DataExporter";
 
 export function PieChartVisualization({ data, outerRadius, innerRadius }: any) {
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
-  const [transferData, setTransferData] = useState<TransferListData>([
-    keys.splice(0, 1),
-    keys,
-  ]);
+  const [entryValues, setEntryValues] = useState<string[]>([]);
+  const [outValues, setOutValues] = useState<string[]>([]);
 
   return (
     <div className="w-full h-[700px] text-black text-xs pt-5">
-      <TransferList
-        style={{ color: "white" }}
-        value={transferData}
-        onChange={setTransferData}
-        searchPlaceholder="Search..."
-        nothingFound="Nothing here"
-        titles={["Label Value (only one)", "Selected Values"]}
-        breakpoint="sm"
-        mb={20}
-      />
+      <div className="flex gap-5 mb-10">
+        <MultiSelect
+          data={keys}
+          value={entryValues}
+          onChange={(evt) => {
+            setEntryValues(evt);
+          }}
+          label="X Axis"
+          placeholder="Pick all that you like"
+        />
+        <MultiSelect
+          data={keys}
+          value={outValues}
+          onChange={(evt) => {
+            setOutValues(evt);
+          }}
+          label="Y Axis"
+          placeholder="Pick all that you like"
+        />
+        <DataExporter data={data} />
+      </div>
 
       <ResponsiveContainer width="100%" height="100%">
         <PieChart width={1000} height={1000}>
-          {transferData[1].map((datakey) => (
+          {outValues.map((datakey) => (
             <Pie
               data={data}
-              nameKey={transferData[0][0].value}
-              dataKey={datakey.value}
+              nameKey={entryValues[0]}
+              dataKey={datakey}
               cx="50%"
               cy="50%"
               outerRadius={300}

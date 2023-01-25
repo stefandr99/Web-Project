@@ -8,21 +8,37 @@ import { executeSparqlQuery } from "../services/query";
 import { useApplicationStore } from "../useApplicationStore";
 
 const QueryInput = () => {
-  const [dbsource, setdbSource] = useState<any>("http://dbpedia.org/sparql");
+  const [dbsource, setdbSource] = useState<any>("http://togostanza.org/sparql");
   const [query, setQuery] =
     useState<string>(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  PREFIX yago: <http://dbpedia.org/class/yago/>
-  PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
-  
-  SELECT ?pref ?area
-  WHERE {
-    ?s a yago:WikicatPrefecturesOfJapan ;
-       rdfs:label ?pref ;
-       dbpedia-owl:areaTotal ?area_total .
-    FILTER (lang(?pref) = 'en')
-    BIND ((?area_total / 1000 / 1000) AS ?area)
-  }
-  ORDER BY DESC(?area)`);
+    PREFIX id_tax:<http://identifiers.org/taxonomy/>
+    PREFIX tax: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+    PREFIX stats:  <http://togogenome.org/stats/>
+    PREFIX up: <http://purl.uniprot.org/core/>
+    PREFIX ipr: <http://purl.uniprot.org/interpro/>
+    
+    SELECT DISTINCT ?organism ?label ?length ?genes (COUNT(DISTINCT ?protein) AS ?hks)
+    {
+      {
+        SELECT DISTINCT ?organism ?up_tax ?label ?length ?genes
+        WHERE
+        {
+          # Cyanobacteria (1117)
+          ?organism a tax:Taxon ;
+            rdfs:subClassOf+ id_tax:1117 ;
+            stats:sequence_length ?length ;
+            stats:gene ?genes ;
+            tax:scientificName ?label .
+            BIND (IRI(REPLACE(STR(?organism), "http://identifiers.org/taxonomy/", "http://purl.uniprot.org/taxonomy/")) AS ?up_tax)
+        }
+      }
+      ?up_tax a up:Taxon .
+      ?protein up:organism ?up_tax ;
+        a up:Protein .
+      # Signal transduction histidine kinase (IPR005467)
+      ?protein rdfs:seeAlso ipr:IPR005467 .
+    } GROUP BY ?organism ?label ?length ?genes ORDER BY ?length
+          `);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const nextStep = useApplicationStore((state) => state.nextStep);

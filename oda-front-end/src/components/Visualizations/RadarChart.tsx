@@ -9,36 +9,46 @@ import {
   PolarRadiusAxis,
   Radar,
 } from "recharts";
-import { TransferList, TransferListData } from "@mantine/core";
+import { MultiSelect, TransferList, TransferListData } from "@mantine/core";
+import { DataExporter } from "../DataExporter";
 
 export function RadarChartVisualization({ data }: any) {
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
-  const [transferData, setTransferData] = useState<TransferListData>([
-    keys.splice(0, 1),
-    keys,
-  ]);
+  const [entryValues, setEntryValues] = useState<string[]>([]);
+  const [outValues, setOutValues] = useState<string[]>([]);
 
   return (
     <div className="w-full h-[700px] text-black text-xs pt-5">
-      <TransferList
-        style={{ color: "white" }}
-        value={transferData}
-        onChange={setTransferData}
-        searchPlaceholder="Search..."
-        nothingFound="Nothing here"
-        titles={["Label Value (only one)", "Selected Values"]}
-        breakpoint="sm"
-        mb={20}
-      />
+      <div className="flex gap-5 mb-10">
+        <MultiSelect
+          data={keys}
+          value={entryValues}
+          onChange={(evt) => {
+            setEntryValues(evt);
+          }}
+          label="X Axis"
+          placeholder="Pick all that you like"
+        />
+        <MultiSelect
+          data={keys}
+          value={outValues}
+          onChange={(evt) => {
+            setOutValues(evt);
+          }}
+          label="Y Axis"
+          placeholder="Pick all that you like"
+        />
+        <DataExporter data={data} />
+      </div>
 
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
           <PolarGrid />
-          <PolarAngleAxis dataKey={transferData[0][0].label} />
+          <PolarAngleAxis dataKey={entryValues[0]} />
           <PolarRadiusAxis />
-          {transferData[1].map((datakey) => (
+          {outValues.map((datakey) => (
             <Radar
-              dataKey={datakey.label}
+              dataKey={datakey}
               stroke="#8884d8"
               fill="#8884d8"
               fillOpacity={0.6}
