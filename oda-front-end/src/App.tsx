@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import QueryPage from "./components/QueryPage";
 import { useApplicationStore } from "./useApplicationStore";
 import { IconGitBranch, IconGitCommit } from "@tabler/icons";
@@ -16,9 +16,17 @@ import {
   useMantineColorScheme,
   ColorSchemeProvider,
   MantineProvider,
-  ColorScheme
+  ColorScheme,
+  ThemeIcon
 } from '@mantine/core';
-import { Moon, Sun } from "react-feather";
+import { Eye, Home, LogOut, Moon, Sun } from "react-feather";
+import HomePage from "./components/HomePage";
+import { useUserStore } from "./useUserStore";
+import Login from "./components/Login";
+import Registration from "./components/Registration";
+import { NotificationsProvider } from '@mantine/notifications';
+import { json } from "d3";
+
 
 function AppWithinContext() {
 
@@ -27,6 +35,13 @@ function AppWithinContext() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const isLogged = useUserStore((state: any) => state.isLoggedIn)
+  const userName = useUserStore((state: any) => state.userName)
+  const userMail = useUserStore((state: any) => state.email)
+  const resetStore = useUserStore((state: any) => state.resetStore)
+
+
+
 
   return (
     <AppShell
@@ -49,7 +64,28 @@ function AppWithinContext() {
             })}
           >
             <Group position="apart">
-              OdaWebDev
+              <Link className="no-underline" to={'/'}>
+                <UnstyledButton
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    width: '100%',
+                    padding: theme.spacing.xs,
+                    borderRadius: theme.radius.sm,
+                    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+
+
+                    '&:hover': {
+                      backgroundColor:
+                        theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                    },
+                  }}
+                >
+                  <Eye size={32} strokeWidth={2.5} />
+                  <Text size={"lg"} weight={700}>Theia</Text>
+                </UnstyledButton>
+              </Link>
               <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30}>
                 {colorScheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
               </ActionIcon>
@@ -57,7 +93,38 @@ function AppWithinContext() {
           </Box>}</Navbar.Section>
 
           <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
-            {/* scrollable content here */}
+            {
+              isLogged && <>
+                <UnstyledButton
+                  onClick={() => {
+                    resetStore()
+                  }
+                  }
+                  sx={(theme) => ({
+                    display: 'block',
+                    width: '100%',
+                    padding: theme.spacing.xs,
+                    borderRadius: theme.radius.sm,
+                    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+
+                    '&:hover': {
+                      backgroundColor:
+                        theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                    },
+                  })}
+                >
+                  <Group>
+                    <ThemeIcon color="orange" variant="light">
+                      <LogOut size={15} />
+                    </ThemeIcon>
+
+                    <Text size="sm" weight={700}>Log out</Text>
+                  </Group>
+                </UnstyledButton>
+              </>
+            }
+
+
           </Navbar.Section>
 
           <Navbar.Section>{<Box
@@ -81,26 +148,51 @@ function AppWithinContext() {
                 },
               }}
             >
-              <Group>
-                <Avatar
-                  src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-                  radius="xl"
-                />
-                <Box sx={{ flex: 1 }}>
-                  <Text size="sm" weight={500}>
-                    Amy Horsefighter
-                  </Text>
-                  <Text color="dimmed" size="xs">
-                    ahorsefighter@gmail.com
-                  </Text>
-                </Box>
-              </Group>
+              {isLogged ?
+                <Group>
+                  <Avatar
+                    radius="xl"
+                  >
+                    {userName[0].toUpperCase()}
+                  </Avatar>
+                  <Box sx={{ flex: 1 }}>
+                    <Text size="sm" weight={500}>
+                      {userName}
+                    </Text>
+                    <Text color="dimmed" size="xs">
+                      {userMail}
+                    </Text>
+                  </Box>
+                </Group>
+                : <Group className="flex items-center justify-center">
+                  <Link to={'/login'}>
+                    <Button>
+                      Log in
+                    </Button>
+                  </Link>
+                  <Link to={'/register'}>
+                    <Button>
+                      Register
+                    </Button>
+                  </Link>
+
+                </Group>}
             </UnstyledButton>
           </Box>}</Navbar.Section>
         </Navbar>
       }
     >
       <Routes>
+        <Route
+          path="/"
+          element={
+            <HomePage />
+          }
+        ></Route>
+        <Route
+          path="/login" element={<Login />}></Route>
+        <Route
+          path="/register" element={<Registration />}></Route>
         <Route
           path="/query"
           element={
@@ -138,9 +230,11 @@ function App() {
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS theme={{ colorScheme:colorScheme, primaryColor: "orange" }} >
+      <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS theme={{ colorScheme: colorScheme, primaryColor: "orange" }} >
+        <NotificationsProvider>
+          <AppWithinContext />
+        </NotificationsProvider>
 
-        <AppWithinContext />
       </MantineProvider>
     </ColorSchemeProvider>
 
