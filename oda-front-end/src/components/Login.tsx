@@ -1,29 +1,23 @@
-import React from 'react'
-import { TextInput, Checkbox, Button, Group, Box } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { showNotification } from '@mantine/notifications';
-import { useUserStore } from '../useUserStore';
-import imgUrl from '../assets/something_went_wrong.png'
+import React from "react";
+import { TextInput, Checkbox, Button, Group, Box } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import { useUserStore } from "../useUserStore";
+import imgUrl from "../assets/something_went_wrong.png";
 
-import axios from 'axios';
-
+import axios from "axios";
 
 async function login(email: string, password: string) {
   try {
-    const response = await axios.post('http://localhost:4000/auth/login', {
+    const response = await axios.post("http://localhost:4000/auth/login", {
       email: email,
-      password: password
-    })
+      password: password,
+    });
     return response.data;
-  }
-  catch (error) {
+  } catch (error) {
     throw error;
   }
 }
-
-
-
-
 
 function Login() {
   const setToken = useUserStore((state: any) => state.setToken);
@@ -34,20 +28,19 @@ function Login() {
   const setIsLoggedIn = useUserStore((state: any) => state.setIsLoggedIn);
   const [loading, setLoading] = React.useState(false);
 
-
   const form = useForm({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
 
     validate: {
-      email: (value: string) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      password: (value: string) => (value.length > 3 ? null : 'Password must be at least 4 characters long'),
+      email: (value: string) =>
+        /^\S+@\S+$/.test(value) ? null : "Invalid email",
+      password: (value: string) =>
+        value.length > 3 ? null : "Password must be at least 4 characters long",
     },
   });
-
-
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,59 +48,60 @@ function Login() {
     login(form.values.email, form.values.password)
       .then((response: any) => {
         showNotification({
-          title: 'Login successful',
-          message: 'You can now log in',
-          color: 'orange',
+          title: "Login successful",
+          message: "You can now log in",
+          color: "orange",
         });
 
         setLoading(false);
-        setEmail(response.email)
-        setUserName(response.username)
-        setToken(response.token)
-        setIsLoggedIn(true)
-        window.location.href = '/';
-
-      }).catch((error) => {
-        console.log(error)
-        setLoading(false)
-        showNotification({
-          title: 'Login failed',
-          message: 'Please try again',
-          color: 'red',
-        });
+        setEmail(response.email);
+        setUserName(response.username);
+        setToken(response.acessToken);
+        setIsLoggedIn(true);
+        window.location.href = "/";
       })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        showNotification({
+          title: "Login failed",
+          message: "Please try again",
+          color: "red",
+        });
+      });
   }
 
   if (isLoggedIn) {
     return (
-      <div className='flex h-full w-full items-center justify-center'>
-        <div><img className='w-72 mr-8' src={imgUrl} /></div>
+      <div className="flex h-full w-full items-center justify-center">
+        <div>
+          <img className="w-72 mr-8" src={imgUrl} />
+        </div>
         <h1>You are already logged in...</h1>
       </div>
-    )
+    );
   }
 
   return (
-    <div className='flex h-full w-full items-center justify-center'>
-
+    <div className="flex h-full w-full items-center justify-center">
       <Box sx={{ maxWidth: 400, width: 400 }} mx="auto">
         <form onSubmit={handleSubmit}>
           <TextInput
             withAsterisk
-            my={'md'}
+            my={"md"}
             label="Email"
-            type={'email'}
+            type={"email"}
             placeholder="your@email.com"
-            {...form.getInputProps('email')}
+            {...form.getInputProps("email")}
           />
 
           <TextInput
             withAsterisk
-            my={'md'}
+            my={"md"}
             type="password"
             label="Password"
             placeholder="********"
-            {...form.getInputProps('password')}
+            {...form.getInputProps("password")}
           />
 
           <Group position="right" mt="xl">
@@ -116,8 +110,7 @@ function Login() {
         </form>
       </Box>
     </div>
-
-  )
+  );
 }
 
-export default Login
+export default Login;

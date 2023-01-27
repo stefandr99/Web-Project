@@ -44,6 +44,9 @@ const QueryInput = () => {
 
   const nextStep = useApplicationStore((state) => state.nextStep);
   const setData = useApplicationStore((state) => state.setDataResult);
+  const setStoreQuery = useApplicationStore((state) => state.setQuery);
+  const setStoreSource = useApplicationStore((state) => state.setSource);
+
   const setGPTSuggestion = useApplicationStore(
     (state) => state.setGPTSuggestion
   );
@@ -55,6 +58,8 @@ const QueryInput = () => {
         if (response && response.data) {
           setGPTSuggestion(response.data.graphSuggestion);
           setData(response.data.data);
+          setStoreQuery(query);
+          setStoreSource(dbsource);
           nextStep();
         }
       })
@@ -72,7 +77,7 @@ const QueryInput = () => {
       <div className="flex justify-between py-8">
         <div className="w-1/2 relative">
           <Input
-          disabled={isLoading}
+            disabled={isLoading}
             color="orange"
             placeholder="Your email"
             defaultValue={dbsource}
@@ -82,8 +87,11 @@ const QueryInput = () => {
         </div>
         <Button
           disabled={isLoading}
-          color="orange" radius="md" size="md"
-          variant="gradient" gradient={{ from: 'orange', to: 'red' }}
+          color="orange"
+          radius="md"
+          size="md"
+          variant="gradient"
+          gradient={{ from: "orange", to: "red" }}
           onClick={() => {
             runQuery();
           }}

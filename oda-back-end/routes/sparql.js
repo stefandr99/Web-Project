@@ -33,4 +33,15 @@ router.post("/", async (req, res) => {
   });
 });
 
+router.post("/simple", async (req, res) => {
+  const endpoint = req.body.endpoint;
+  const query = req.body.query;
+
+  const results = await d3.sparql(endpoint, query);
+
+  res.send({
+    data: results,
+  });
+});
+
 module.exports = router;
