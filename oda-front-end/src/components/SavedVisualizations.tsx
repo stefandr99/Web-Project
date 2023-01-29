@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../useUserStore";
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import { Badge, Button, Card, Group, Text } from "@mantine/core";
 import { useApplicationStore } from "../useApplicationStore";
 import { useNavigate } from "react-router-dom";
+import imgUrl from "../assets/something_went_wrong.png";
 
 function SavedVisualizations() {
   const isLogged = useUserStore((state: any) => state.isLoggedIn);
@@ -26,26 +27,24 @@ function SavedVisualizations() {
   const [visualizations, setVisualizations] = useState([]);
   const navigate = useNavigate();
 
-  function fetchVisualizations() {
+  async function fetchVisualizations() {
     try {
-      const response: any = axios.get("http://localhost:4000/user/", {
+      return await axios.get("http://localhost:4000/user/", {
         headers: {
           authorization: "Bearer " + token,
         },
       });
-      return response;
     } catch (error) {
       throw error;
     }
   }
 
-  function fetchVisualizationData(source: string, query: string) {
+  async function fetchVisualizationData(source: string, query: string) {
     try {
-      const response: any = axios.post("http://localhost:4000/sparql/simple", {
+      return await axios.post("http://localhost:4000/sparql/simple", {
         query: query,
         endpoint: source,
       });
-      return response;
     } catch (error) {
       throw error;
     }
@@ -63,7 +62,15 @@ function SavedVisualizations() {
       });
   }, []);
 
-  if (!isLogged) return <div>Not logged in</div>;
+  if (!isLogged)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <div>
+          <img className="w-72 mr-8" src={imgUrl} />
+        </div>
+        <h1 className={"max-w-[300px]"}>You are smart... We're smarter tho.</h1>
+      </div>
+    );
 
   if (isFetching) return <div>Loading...</div>;
 
@@ -85,8 +92,6 @@ function SavedVisualizations() {
           <Text size="sm" color="dimmed">
             {visualization.description}
           </Text>
-          {JSON.stringify}
-
           <Button
             onClick={() => {
               fetchVisualizationData(
@@ -105,13 +110,11 @@ function SavedVisualizations() {
                   console.log(error);
                 });
             }}
-            variant="light"
-            color="blue"
             fullWidth
             mt="md"
             radius="md"
           >
-            Book classic tour now
+            View
           </Button>
         </Card>
       ))}

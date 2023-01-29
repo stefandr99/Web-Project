@@ -13,9 +13,12 @@ import { PieChartVisualization } from "./Visualizations/PieChart";
 import { RadarChartVisualization } from "./Visualizations/RadarChart";
 import { RadialChartVisualization } from "./Visualizations/RadialChart";
 import { ScatterChartVisualization } from "./Visualizations/ScatterChart";
+import { showNotification } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
 
 function QueryPage() {
   const step = useApplicationStore((state) => state.step);
+  const setStep = useApplicationStore((state) => state.setStep);
   const [opened, setOpened] = useState(false);
   const data: any[] = useApplicationStore((state) => state.dataResult);
   const type = useApplicationStore((state) => state.chosenGraphicType);
@@ -25,6 +28,7 @@ function QueryPage() {
   const source = useApplicationStore((state: any) => state.source);
   const entryValues = useApplicationStore((state: any) => state.entryValues);
   const outValues = useApplicationStore((state: any) => state.outValues);
+  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {
@@ -35,7 +39,7 @@ function QueryPage() {
 
   async function saveVisualization() {
     try {
-      axios.post(
+      await axios.post(
         "http://localhost:4000/user/save",
         {
           entryValues: entryValues,
@@ -54,8 +58,25 @@ function QueryPage() {
           },
         }
       );
+
+      showNotification({
+        title: "Saved successfully",
+        message: "Your visualization has been saved",
+        color: "orange",
+      });
+      setStep(0);
+      setOpened(false);
+      navigate("/saved");
     } catch (err) {
-      console.log(err);
+      showNotification({
+        title: "Error",
+        message: "Something went wrong. Please try again",
+        color: "red",
+      });
+
+      setOpened(false);
+
+      throw err;
     }
   }
 

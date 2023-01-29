@@ -16,6 +16,7 @@ interface ApplicationStore {
   setChoosenGraphicType: (type: string) => void;
   nextStep: () => void;
   previousStep: () => void;
+  setStep: (data: number) => void;
   setGPTSuggestion: (data: string) => void;
   setQuery: (data: string) => void;
   setSource: (data: string) => void;
@@ -44,5 +45,6 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   nextStep: () => set((state: { step: number }) => ({ step: state.step + 1 })),
   previousStep: () =>
     set((state: { step: number }) => ({ step: state.step - 1 })),
+  setStep: (data: number) => set({ step: data }),
   resetStep: () => set({ step: 0 }),
 }));

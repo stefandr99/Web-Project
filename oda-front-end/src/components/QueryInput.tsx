@@ -6,12 +6,19 @@ import { sparql } from "@codemirror/legacy-modes/mode/sparql";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
 import { executeSparqlQuery } from "../services/query";
 import { useApplicationStore } from "../useApplicationStore";
-import { Button, Input, LoadingOverlay } from "@mantine/core";
+import { Button, Input, LoadingOverlay, Select } from "@mantine/core";
 
-const QueryInput = () => {
-  const [dbsource, setdbSource] = useState<any>("http://togostanza.org/sparql");
-  const [query, setQuery] =
-    useState<string>(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+const queryTitles: string[] = [
+  "Pick a query",
+  "TogoStanza Genetic Information",
+  "Japan Prefectures Area",
+];
+
+const queryPresets = [
+  {
+    title: "TogoStanza Genetic Information",
+    endpoint: "http://togostanza.org/sparql",
+    query: `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX id_tax:<http://identifiers.org/taxonomy/>
     PREFIX tax: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
     PREFIX stats:  <http://togogenome.org/stats/>
@@ -39,7 +46,31 @@ const QueryInput = () => {
       # Signal transduction histidine kinase (IPR005467)
       ?protein rdfs:seeAlso ipr:IPR005467 .
     } GROUP BY ?organism ?label ?length ?genes ORDER BY ?length
-          `);
+          `,
+  },
+  {
+    title: "Japan Prefectures Area",
+    endpoint: "http://dbpedia.org/sparql",
+    query: `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX yago: <http://dbpedia.org/class/yago/>
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+
+SELECT ?pref ?area
+WHERE {
+  ?s a yago:WikicatPrefecturesOfJapan ;
+     rdfs:label ?pref ;
+     dbpedia-owl:areaTotal ?area_total .
+  FILTER (lang(?pref) = 'en')
+  BIND ((?area_total / 1000 / 1000) AS ?area)
+}
+ORDER BY DESC(?area)`,
+  },
+];
+
+const QueryInput = () => {
+  const [value, setValue] = useState<any>(null);
+  const [dbsource, setdbSource] = useState<any>("");
+  const [query, setQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const nextStep = useApplicationStore((state) => state.nextStep);
@@ -78,26 +109,40 @@ const QueryInput = () => {
         <div className="w-1/2 relative">
           <Input
             disabled={isLoading}
+            className={"mt-0.5"}
             color="orange"
-            placeholder="Your email"
+            placeholder="Query DB Source"
             defaultValue={dbsource}
-            onChange={(e) => setdbSource(e.target.value)}
+            onChange={(e: any) => setdbSource(e.target.value)}
             size="sm"
           />
         </div>
-        <Button
-          disabled={isLoading}
-          color="orange"
-          radius="md"
-          size="md"
-          variant="gradient"
-          gradient={{ from: "orange", to: "red" }}
-          onClick={() => {
-            runQuery();
-          }}
-        >
-          Run
-        </Button>
+        <div className={"flex items-center gap-5 mb-1"}>
+          <Select
+            value={queryTitles[0]}
+            onChange={(value) => {
+              const query = queryPresets.find((q) => q.title === value);
+              if (query) {
+                setQuery(query.query);
+                setdbSource(query.endpoint);
+              }
+            }}
+            data={queryTitles}
+          />
+          <Button
+            disabled={isLoading}
+            color="orange"
+            radius="md"
+            size="md"
+            variant="gradient"
+            gradient={{ from: "orange", to: "red" }}
+            onClick={() => {
+              runQuery();
+            }}
+          >
+            Run
+          </Button>
+        </div>
       </div>
       <div className="text-xs rounded-md overflow-hidden relative">
         <LoadingOverlay visible={isLoading} overlayBlur={2} />

@@ -1,6 +1,6 @@
 import { Badge, Button, Card, Group, Text } from "@mantine/core";
 import React from "react";
-import { Eye, User, UserPlus } from "react-feather";
+import { Eye, Save, User, UserPlus } from "react-feather";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../useUserStore";
 
@@ -82,6 +82,33 @@ function HomePage() {
                     radius="md"
                   >
                     Register
+                  </Button>
+                </Link>
+              </Card>
+            </>
+          )}
+          {isLoggedIn && (
+            <>
+              <Card
+                className="flex items-center flex-col text-center w-[300px]"
+                shadow="sm"
+                p="lg"
+                radius="md"
+                withBorder
+              >
+                <Save size={50} />
+                <Text size={"xl"} mt="md" weight={500}>
+                  View your saved queries
+                </Text>
+                <Link className="no-underline" to={"/saved"}>
+                  <Button
+                    variant="gradient"
+                    gradient={{ from: "orange", to: "red" }}
+                    fullWidth
+                    mt="lg"
+                    radius="md"
+                  >
+                    Saved
                   </Button>
                 </Link>
               </Card>

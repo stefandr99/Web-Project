@@ -91,9 +91,9 @@ async function getQuery(req, res) {
 exports.query = async (req, res) => tokenValidation(req, res, getQuery);
 
 async function shareQuery(req, res) {
-  const userEmail = req.user.email;
-  const queryId = req.body.id;
-  const friendEmail = req.body.email;
+  const userEmail = req.body.userEmail;
+  const queryId = req.body.queryId;
+  const friendEmail = req.body.friendEmail;
 
   Query.findById(queryId).exec((err, query) => {
     if (err) {
@@ -105,9 +105,6 @@ async function shareQuery(req, res) {
 
       return;
     }
-
-    console.log("query email: " + query.email);
-    console.log("user email: " + userEmail);
 
     if (query.email != userEmail) {
       res
