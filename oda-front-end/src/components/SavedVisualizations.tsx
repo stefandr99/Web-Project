@@ -5,6 +5,7 @@ import { Badge, Button, Card, Group, Text } from "@mantine/core";
 import { useApplicationStore } from "../useApplicationStore";
 import { useNavigate } from "react-router-dom";
 import imgUrl from "../assets/something_went_wrong.png";
+import { APILink } from "../env";
 
 function SavedVisualizations() {
   const isLogged = useUserStore((state: any) => state.isLoggedIn);
@@ -29,7 +30,7 @@ function SavedVisualizations() {
 
   async function fetchVisualizations() {
     try {
-      return await axios.get("http://localhost:4000/user/", {
+      return await axios.get(`https://${APILink}/user/`, {
         headers: {
           authorization: "Bearer " + token,
         },
@@ -41,7 +42,7 @@ function SavedVisualizations() {
 
   async function fetchVisualizationData(source: string, query: string) {
     try {
-      return await axios.post("http://localhost:4000/sparql/simple", {
+      return await axios.post(`https://${APILink}/sparql/simple`, {
         query: query,
         endpoint: source,
       });

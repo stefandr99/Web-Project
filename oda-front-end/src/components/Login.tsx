@@ -7,10 +7,11 @@ import imgUrl from "../assets/something_went_wrong.png";
 
 import axios from "axios";
 import AlreadyLoggedIn from "./AlreadyLoggedIn";
+import { APILink } from "../env";
 
 async function login(email: string, password: string) {
   try {
-    const response = await axios.post("http://localhost:4000/auth/login", {
+    const response = await axios.post(`https://${APILink}/auth/login`, {
       email: email,
       password: password,
     });

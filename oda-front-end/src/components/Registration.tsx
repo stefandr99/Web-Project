@@ -10,8 +10,8 @@ import {
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { useUserStore } from "../useUserStore";
-import imgUrl from "../assets/something_went_wrong.png";
 import AlreadyLoggedIn from "./AlreadyLoggedIn";
+import { APILink } from "../env";
 
 function Registration() {
   const [loading, setLoading] = React.useState(false);
@@ -37,7 +37,7 @@ function Registration() {
 
   async function register() {
     try {
-      const response = await fetch("http://localhost:4000/auth/register", {
+      const response = await fetch(`https://${APILink}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -15,6 +15,7 @@ import { RadialChartVisualization } from "./Visualizations/RadialChart";
 import { ScatterChartVisualization } from "./Visualizations/ScatterChart";
 import { showNotification } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
+import { APILink } from "../env";
 
 function QueryPage() {
   const step = useApplicationStore((state) => state.step);
@@ -40,7 +41,7 @@ function QueryPage() {
   async function saveVisualization() {
     try {
       await axios.post(
-        "http://localhost:4000/user/save",
+        `https://${APILink}/user/save`,
         {
           entryValues: entryValues,
           outValues: outValues,

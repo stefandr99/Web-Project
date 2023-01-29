@@ -11,24 +11,14 @@ import React from "react";
 import { useApplicationStore } from "../useApplicationStore";
 import { useUserStore } from "../useUserStore";
 import { ChartRenderer } from "./QueryPage";
-import { BarChartVisualization } from "./Visualizations/BarChart";
-import { LineChartVisualization } from "./Visualizations/LineChart";
-import { PieChartVisualization } from "./Visualizations/PieChart";
-import { RadarChartVisualization } from "./Visualizations/RadarChart";
-import { RadialChartVisualization } from "./Visualizations/RadialChart";
-import { ScatterChartVisualization } from "./Visualizations/ScatterChart";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
+import { APILink } from "../env";
 
 function Reviewer() {
   const [opened, setOpened] = React.useState(false);
   const userMail = useUserStore((state: any) => state.email);
-  const data: any[] = useApplicationStore((state) => state.dataResult);
-  const type = useApplicationStore((state) => state.chosenGraphicType);
-  const query = useApplicationStore((state: any) => state.query);
-  const entryValues = useApplicationStore((state: any) => state.entryValues);
-  const outValues = useApplicationStore((state: any) => state.outValues);
   const visualisation = useApplicationStore(
     (state: any) => state.visualisation
   );
@@ -43,7 +33,7 @@ function Reviewer() {
   async function shareVisualization() {
     try {
       await axios.post(
-        "http://localhost:4000/user/share",
+        `https://${APILink}/user/share`,
         {
           userEmail: userMail,
           queryId: visualisation._id,
