@@ -32,17 +32,17 @@
         <li><a href="#spqrql"><span>5. </span>SPARQL and Datasets</a>
           <ol>
             <li><a href="#sparql-subsection"><span>5.1. </span>SPARQL</a></li>
-            <li><a href="#sparql-query-subsection"><span>5.2. </span>Comunica query-sparql library</a></li>
             <li><a href="#datasets"><span>5.2. </span>Datasets</a></li>
-            <li><a href="#sparql-endpoint"><span>5.2. </span>SPARLQ endpoint</a></li>
+            <li><a href="#sparql-endpoint"><span>5.3. </span>SPARQL endpoint</a></li>
           </ol>
         </li>
         <li><a href="#auth"><span>6. </span>Authentication and authorization</a>
           <ol>
             <li><a href="#auth-authentication"><span>6.1. </span>Authentication endpoints</a></li>
-            <li><a href="#auth-authentication"><span>6.2. </span>Authorization endpoints</a></li>\
+            <li><a href="#auth-authentication"><span>6.2. </span>Authorization endpoints</a></li>
           </ol>  
         </li>
+        <li><a href="#deployment"><span>7. Application Deploy</span></a>
       <dl>
         <dt>Authors</dt>
         <dd>
@@ -64,45 +64,64 @@
       </p>
     </section>
     <section id="introduction" role="doc-introduction">
-      <h2><span>2. </span>Introduction</h2>
+      <h2><span>2. </span>Introduction and project progress</h2>
       <p>
         Open Dataset Visualizer is a web application which will provide useful visualizations for better understanding of 
-        data retrieved via a SPARQL endpoint. In order to use ODA, users should create an account and based on their authorization they
-        will be allowed to perform different actions:
-        <ul>
-          <li>
-            write raw SPARQL queries in the application's query editor, choose which columns of retrieved data will be represented 
-            and what kind diagrams will represent the result;
-          </li>
-          <li>
-            save certain charts to be used later with other purposes;
-          </li>
-          <li>
-            update saved diagrams by adding, deleting, modifing columns / data source;
-          </li>
-          <li>
-            delete a saved representation associated with their account;
-          </li>
-          <li>
-            share a chart with another user; 
-          </li>
-        </ul>
-      </p>
-      <p>
-        The application is built in 3 modules (which will be described in the following document sections):
-        <ul>
-          <li>
-            Authentication and authorization web API;
-          </li>
-          <li>
-            SPQRQL data retrieving web API;
-          </li>
-          <li>
-            User interface and user experience: writing queries, visualize charts (represented data), save and 
-            share charts
-          </li>
-        </ul>
-      </p>
+        data retrieved via a SPARQL endpoint. In the following two subsection we will describe the initial goals of the
+        application and the what we've managed to implement.
+
+
+        <section>
+
+          <h3><span>2.1 </span>Initial goals</h3>
+
+          <ul>
+            <li>
+              write raw SPARQL queries in the application's query editor, choose which columns of retrieved data will be represented 
+              and what kind diagrams will represent the result;
+            </li>
+            <li>
+              save certain charts to be used later with other purposes;
+            </li>
+            <li>
+              update saved diagrams by adding, deleting, modifing columns / data source;
+            </li>
+            <li>
+              delete a saved representation associated with their account;
+            </li>
+            <li>
+              share a chart with another user; 
+            </li>
+          </ul>
+        </p>
+        <p>
+          The application is built in 3 modules (which will be described in the following document sections):
+          <ul>
+            <li>
+              Authentication and authorization web API;
+            </li>
+            <li>
+              SPQRQL data retrieving web API;
+            </li>
+            <li>
+              User interface and user experience: writing queries, visualize charts (represented data), save and 
+              share charts
+            </li>
+          </ul>
+        </p>
+
+        </section>
+
+        <section>
+
+          <h3><span>2.2 </span>What we've achieved</h3>
+
+          <p>We have successfully implemented all the initial goals outlined, with the exception of updating saved diagrams. The application has been developed in three modules: the Authentication and authorization web API, the SPARQL data retrieving web API, and the User interface and user experience, which includes writing queries, visualizing charts, saving and sharing charts. The users are able to write raw SPARQL queries in the application's query editor, select columns of retrieved data to be represented, and choose the type of diagrams to display the results. They are able to save charts for future use and share them with other users, but currently cannot update the saved diagrams by adding, deleting, or modifying columns or data sources.</p>
+
+          <p>Furthermore, it is also worth mentioning that we have utilized d3-sparql instead of communica for querying SPARQL data. d3-sparql is a library that facilitates the retrieval and visualization of RDF data using SPARQL queries, and it provides a simple and intuitive interface for developers. By using d3-sparql, we have been able to leverage its capabilities to enhance the functionality of our application and provide a better user experience. This choice of library has allowed us to effectively manage the data retrieval and visualization process, while also providing a high level of customization and control for users.</p>
+        </section>
+
+       
     </section>
 
     <section id="architecture">
@@ -143,17 +162,13 @@
            It is very lightweight and easy to use. It is also very flexible and allows us to create our own state management system.
         </li>
         <li>
+          <b> d3-sparql </b> is a JavaScript library that allows you to visualize SPARQL query results with D3.js, a popular data visualization library. The library provides an interface for fetching query results from a SPARQL endpoint and transforming them into the format required by D3, making it easy to create interactive, dynamic visualizations based on linked data.
+        </li>
+        <li>
           <b>Routing - react-router</b> : react-router is a routing library for React. It allows us to create routes and navigate between them.
         </li>
         <li>
-          <b>SparQL Queries - Comunica</b> : Comunica is a SPARQL query engine that can be used to query SPARQL endpoints.
-           It is very flexible and can be used in different environments.
-        </li>
-        <li>
           <b>Charts - Recharts</b> : Recharts is a charting library for React. It is very flexible and allows us to create different types of charts.
-        </li>
-        <li>
-          <b>Visualizations: Recharts, React Chart js 2, Victory, Visx, Nivo</b> : We will use different charting libraries to create different types of charts or any other types of visualizations. 
         </li>
       </ul>
     </section>
@@ -249,6 +264,217 @@
       </section>
     </section>
 
+    <section id="front-end">
+      <h2><span>5. </span>Front-End</h2>
+      <section>
+        <h3><span>5.1 </span>Vite</h3>
+        <p>
+          Vite is a build tool that aims to provide a faster and leaner development experience for modern web projects. It consists of two major parts:
+          <ul>
+            <li>
+              A dev server that provides rich feature enhancements over native ES modules, for example extremely fast Hot Module Replacement (HMR).
+            </li>
+            <li>
+              A build command that bundles your code with Rollup, pre-configured to output highly optimized static assets for production.
+            </li>
+          </ul>
+          Vite is opinionated and comes with a number of built-in features out of the box, such as:
+          <ul>
+            <li>
+              ES module based dev server that supports native ESM imports during development.
+            </li>
+            <li>
+              Rich feature enhancements over native ES modules, for example extremely fast Hot Module Replacement (HMR).
+            </li>
+            <li>
+              Rollup based build command that bundles your code with Rollup, pre-configured to output highly optimized static assets for production.
+            </li>
+            <li>
+              TypeScript support.
+            </li>
+            <li>
+              JSX/TSX support.
+            </li>
+        </p>
+      </section>
+      <section>
+        <h3><span>5.2 </span>React with TypeScript</h3>
+        <p>
+          React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers and companies.
+          React can be used as a base in the development of single-page or mobile applications. However, React is only concerned with rendering data to the DOM, and so creating React applications usually requires the use of additional libraries for state management and routing.
+          TypeScript is an open-source language which builds on JavaScript, one of the world’s most used tools, by adding static type definitions.
+          TypeScript saves you time catching errors and providing fixes before you run code.
+          TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.
+          Any browser. Any host. Any OS. Open source.
+        </p>
+      </section>
+      <section>
+        <h3><span>5.3</span> Mantine UI</h3>
+        <p>
+          Mantine is a React UI library that provides a set of components and hooks to build your own design system or design a new website.
+          It has multiple utilities that we've used across the app
+          <ul>
+            <li>
+              <code>@mantine/core</code> - Mantine core components, such as buttons, inputs, selects, etc.
+              <div style="display:flex;flex-direction:column; align-items:center;">
+              <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/ui_core_components.png" />
+                <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.6 - UI Built with Mantine</figcaption>
+              </div>
+
+
+            </li>
+            <li>
+              <code>@mantine/form</code> - Mantine form components, such as form, form control, form error, etc.
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/form_example.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.7 - Form Built with Mantine</figcaption>
+                </div>
+            </li>
+            <li>
+              <code>@mantine/hooks</code> - Mantine hooks, such as use-id, use-merge-refs, use-previous-value, etc.
+            </li>
+            <li>
+              <code>@mantine/styles</code> - Mantine styles, such as create-mantine-theme, create-use-styles, etc.
+            </li>
+            <li>
+              <code>@mantine/theme</code> - Mantine theme, such as MantineProvider, use-mantine-theme, etc.
+            </li>
+            <li><code>@mantine/notifications</code> - Mantine notifications, mainly the showNotification function.</li>
+          </ul>
+        </p>
+      </section>
+
+      <section>
+        <h3><span>5.4</span> Zustand</h3>
+        <p>
+          We have two stores across the app, one for the user and one for the visualizations.
+          <ul>
+            <li>
+              <code>userStore</code> - The user store is used to store the user's data, such as the username, the email, the avatar, bearer token etc.
+              Also, this store persists, so the user's data is stored in the local storage.
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/userStore.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.8 - User Store</figcaption>
+                </div>
+            </li>
+            <li>
+              <code>applicationStore</code> - The application store is used to store the visualizations data, such as the title, the description, the data, the type of chart, as well as the steps of the visualization creation process.
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/applicationStore.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.9 - Application store</figcaption>
+                </div>
+            </li>
+          </ul>
+          
+        </p>
+      </section>
+      <section>
+        <h3><span>5.5</span> CodeMirror</h3>
+        <p>
+          CodeMirror is a versatile text editor implemented in JavaScript for the browser. It is specialized for editing code, and comes with a number of language modes and addons that implement more advanced editing functionality.
+          We have used CodeMirror to implement the SPQRQL editor.
+         </p>
+         <p>
+          <code>@uiw/react-codemirror</code> is a React library that provides a React component for integrating CodeMirror.
+          The library wraps the CodeMirror editor in a React component, making it easier to use and integrate into React projects, like ours.
+          </p>
+          <div style="display:flex;flex-direction:column; align-items:center;">
+            <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/codemirror.png" />
+              <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.9 - CodeMirror in Theia</figcaption>
+            </div>
+      </section>
+
+      <section>
+        <h3><span>5.6</span> Recharts</h3>
+        <p>
+          Recharts is a Redefined chart library built with React and D3.
+          We have used Recharts to implement the charts.
+          </p>
+          <p>Example of implemented charts</p>
+          <ul>
+            <li>
+              <code>BarChart</code> - Bar chart
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/bar_chart.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.10 - Bar Chart</figcaption>
+                </div>
+            </li>
+            <li>
+              <code>LineChart</code> - Line chart
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/line_chart.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.11 - Line Chart</figcaption>
+                </div>
+            </li>
+            <li>
+              <code>PieChart</code> - Pie chart
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/pie_chart.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.12 - Pie Chart</figcaption>
+                </div>
+            </li>
+            <li>
+              <code>ScatterChart</code> - Scatter chart
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/scatter_chart.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.13 - Scatter Chart</figcaption>
+                </div>
+            </li>
+            <li>
+              <code>RadarChart</code> - Radar Chart
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/radar_chart.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.14 - Radar Chart</figcaption>
+                </div>
+            </li>
+            <li>
+              <code>Radial Chart</code> - Radial Chart
+              <div style="display:flex;flex-direction:column; align-items:center;">
+                <img style="max-width: 100%; margin-top: 12px;" src="./diagrams/radial_chart.png" />
+                  <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Fig.15 - Radial Chart</figcaption>
+                </div>
+            </li>
+
+          </ul>
+      </section>
+
+      <section>
+        <h3><span>5.7</span>JSON-LD Detection</h3>
+
+        <p>
+          JSON-LD is a JSON-based format to serialize <a href="https://www.w3.org/TR/json-ld/">Linked Data</a>. 
+          It is designed to be easy to read for humans and to be easy to generate and parse by machines. 
+          JSON-LD is primarily intended to be a way to use Linked Data in Web-based programming environments, 
+          to build interoperable Web services, and to store Linked Data in JSON-based storage engines.
+        </p>
+        <p>
+          We have used <code>schema-dts</code> and <code>react-schemaorg</code> to place JSON-LD on our pages so that search engines can understand the content of our pages.
+        </p>
+        <p>
+          The types of JSON-LD we have used are:
+          <ul>
+            <li>
+              <code>WebPage</code> 
+            </li>
+            <li>
+              <code>Dataset</code>
+            </li>
+            <li>
+              <code>Organization</code>
+            </li>
+            <li>
+              <code>Person</code>
+            </li>
+            <li>
+              <code>CreativeWork</code>
+            </li>
+          </ul>
+        </p>
+      </section>
+
+
+    </section>
+
     <section id="spqrql">
       <h2><span>5. </span>SPQRQL and Datasets</h2>
       <p>
@@ -270,27 +496,8 @@
           and returns that information, in the form of a set of bindings or an RDF graph. (Apache Jena)
         </p>
       </section>
-      <section id="sparql-query-subsection">
-        <h3><span>5.2 </span>Comunica query-sparql library</h3>
-        <p>
-          <a href="https://www.npmjs.com/package/@comunica/query-sparql">Comunica SPARQL</a> is a SPARQL query engine for 
-          JavaScript for querying over decentralized RDF knowledge graphs on the Web.
-          It's main distinguishing features are the following:
-          <ul>
-            <li>
-              Execute SPARQL 1.1 or GraphQL-LD queries;
-            </li>
-            <li>
-              Federated querying over heterogeneous interfaces, such as RDF files, SPARQL endpoints, Triple Pattern Fragments, or Solid data pods;
-            </li>
-            <li>
-              High modularity enabling easy extensions and customization.
-            </li>
-          </ul>
-        </p>
-      </section>
       <section id="datasets">
-        <h3><span>5.3 </span>Datasets</h3>
+        <h3><span>5.2 </span>Datasets</h3>
         <p>
           In ODA, when an user wants to retireve data by writing an SPARQL query in the page query editor, they will be able 
           to specify which open dataset they target. Being a flexible application, user has the posibility to insert the link of
@@ -306,7 +513,7 @@
         </p>
       </section>
       <section id="sparql-endpoint">
-        <h3><span>5.4 </span>SPARLQ endpoint</h3>
+        <h3><span>5.3 </span>SPARQL endpoint</h3>
         <p>
           In order to retireve data from chosen open dataset, the user has to write a SPQRQL query in the 
           query editor. When submitting the written query, an API call will be made by the front-end application.
@@ -418,3 +625,26 @@
         </ul>
       </section>
     </section>
+    <section id="deployment">
+      <h2><span>7. </span>Application Deploy</h2>
+      <p>
+        The React app will be hosted on Netlify, the Express app will be hosted on Fly.io.
+      </p>
+      <ul>
+        <li>
+          The React app is available at <a href="https://theia-oda.netlify.app/">https://theia-oda.netlify.app/</a>
+        </li>
+        <li>
+          The API endpoints are available at <a href="https://theia-oda.fly.dev">https://theia-oda.fly.dev</a>
+        </li>
+      </ul>
+      <p>
+        Netlify is a cloud-based platform that provides hosting, continuous deployment, and management services for modern web applications. It is designed to simplify the development and deployment of web applications, allowing developers to focus on writing code while the platform takes care of the underlying infrastructure. Netlify supports a wide range of web technologies and provides a variety of tools and features for managing and optimizing web applications, such as automatic optimization for faster loading times, automatic SSL certificates, and custom domains.
+      </p>
+      <p>
+        Fly.io is a cloud platform that provides hosting and management services for server-side applications, including those built with Express.js. It offers automatic scaling, global content delivery, and custom domains, as well as other features for managing and optimizing server-side applications. Fly.io provides a secure and reliable platform for deploying and running server-side applications, freeing developers from the complexities of managing infrastructure and allowing them to focus on writing code. The platform provides a simple and intuitive interface for managing server-side applications, making it an attractive option for us.
+      </p>
+
+    </section>
+    </body>
+    </html>
