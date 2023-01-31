@@ -16,6 +16,8 @@ import { ScatterChartVisualization } from "./Visualizations/ScatterChart";
 import { showNotification } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import { APILink } from "../env";
+import { JsonLd } from "react-schemaorg";
+import { WebPage, Table, Dataset, CreativeWork } from "schema-dts";
 
 function QueryPage() {
   const step = useApplicationStore((state) => state.step);
@@ -26,6 +28,8 @@ function QueryPage() {
   const userMail = useUserStore((state: any) => state.email);
   const token = useUserStore((state: any) => state.token);
   const query = useApplicationStore((state: any) => state.query);
+  const dbsource = useApplicationStore((state: any) => state.source);
+
   const source = useApplicationStore((state: any) => state.source);
   const entryValues = useApplicationStore((state: any) => state.entryValues);
   const outValues = useApplicationStore((state: any) => state.outValues);
@@ -83,13 +87,62 @@ function QueryPage() {
 
   switch (step) {
     case 0:
-      return <QueryInput />;
+      return (
+        <>
+          <QueryInput />
+          <JsonLd<WebPage>
+            item={{
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              name: "Query Input Page",
+              author: "Serghei Cunev, Stefan Dragoi, Nazar Fatikhov",
+              countryOfOrigin: "Romania, Republic of Moldova, Russia",
+              dateCreated: "2 February, 2022",
+              inLanguage: "English",
+            }}
+          />
+        </>
+      );
     case 1:
-      return <QueryDataGraphPicker />;
+      return (
+        <>
+          <QueryDataGraphPicker />
+          <JsonLd<WebPage>
+            item={{
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: "Query Data Graph Picker Page",
+            }}
+          />
+          <JsonLd<Table>
+            item={{
+              "@context": "https://schema.org",
+              "@type": "Table",
+              name: "Query Results",
+            }}
+          />
+          <JsonLd<Dataset>
+            item={{
+              "@context": "https://schema.org",
+              "@type": "Dataset",
+              name: "SparQL Query",
+              url: dbsource,
+              text: query,
+            }}
+          />
+        </>
+      );
     case 2:
       return (
         <>
           <ChartRenderer setOpened={setOpened} />{" "}
+          <JsonLd<CreativeWork>
+            item={{
+              "@context": "https://schema.org",
+              "@type": "CreativeWork",
+              name: "Query Visualization",
+            }}
+          />
           <Modal
             opened={opened}
             onClose={() => setOpened(false)}

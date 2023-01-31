@@ -30,7 +30,9 @@
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-router-dom": "^6.4.3",
+    "react-schemaorg": "^2.0.0",
     "recharts": "^2.3.2",
+    "schema-dts": "^1.1.0",
     "sparqljs": "^3.6.2",
     "zustand": "^4.3.2"
   },
