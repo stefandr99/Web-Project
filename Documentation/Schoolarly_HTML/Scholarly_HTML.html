@@ -319,15 +319,26 @@
           and flexible <a href="https://nodejs.org/en/">Node.js</a> web application framework.
         </p>
         <p>
-          Instantiating a QueryEngine object 
-          <pre><code>const queryEngine = new QueryEngine();</code></pre>,
-          the <a href="https://nodejs.org/en/">Node.js</a> endpoint will query the specified open dataset to be returned 
-          to the front-end application and to be represented in order to be better understanted.
+          We've decided to use the d3-sparql library in order to execute the SPARQL queries. The d3-sparql library is a
+          <a href="https://www.npmjs.com/package/d3-sparql">Node.js</a> library that allows to execute SPARQL queries and
+          to retrieve the results in JSON format. The library is based on the <a href="https://www.npmjs.com/package/sparql-client">sparql-client</a> library.
         </p>
         <p>
-          A piece of code exemplifying how <a href="https://www.npmjs.com/package/@comunica/query-sparql">Comunica query-sparkql</a>
-          executes an SPARQL query:
-
+          We will have the following endpoints:
+          <ul>
+            <li>
+              <code>POST /sparql/</code> - It takes JSON payload in the request body that contains two properties: endpoint and query.
+              It uses the d3.sparql function to make a SPARQL query to the specified endpoint with the given query.
+               The results are then processed using OpenAI's Generative Pre-trained Transformer 3 (GPT-3) <code>openai.createCompletion</code> function,
+                to suggest a graph type and generate natural language descriptions of the data. Finally, the results and the graph suggestion are sent back as a JSON response.
+            </li>
+            <li>
+              <code>POST /sparql/simple</code> - It is similar / route, but it does not make use of the OpenAI function.
+               It only retrieves the results of the SPARQL query and returns them as a JSON response.
+            </li>
+        </p>
+        <p>
+          <span style="font-weight: 700;">Example Query</span>
           <pre><code>
             const bindingsStream = await queryEngine.queryBindings(
               `PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -353,9 +364,6 @@
               },
             );
           </code></pre>
-          Futher, the <code>bindingsStream</code> object method: <code>bindingsStream.get('columnName')</code> gets value for specified 
-          data column, in the end the endpoint returning all the  user's selected columns to the front-end application represents it 
-          in charts.
         </p>
       </section>
     </section>

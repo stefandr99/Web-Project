@@ -1,5 +1,6 @@
-import { MultiSelect } from "@mantine/core";
-import { useState } from "react";
+import { Button, MultiSelect, useMantineTheme } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   Bar,
   CartesianGrid,
@@ -9,37 +10,70 @@ import {
   Tooltip,
   XAxis,
 } from "recharts";
+import { useApplicationStore } from "../../useApplicationStore";
+import { useUserStore } from "../../useUserStore";
 import { DataExporter } from "../DataExporter";
 
-export const BarChartVisualization = ({ data }: any) => {
+export const BarChartVisualization = ({
+  data,
+  onSaveVisualization,
+  simpleView,
+}: any) => {
+  let { id } = useParams();
+
+  useEffect(() => {
+    if (!id) {
+      setEntryValues([]);
+      setOutValues([]);
+    }
+  }, []);
+
+  const theme = useMantineTheme();
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
-  const [entryValues, setEntryValues] = useState<string[]>([]);
-  const [outValues, setOutValues] = useState<string[]>([]);
+  const entryValues = useApplicationStore((state: any) => state.entryValues);
+  const setEntryValues = useApplicationStore(
+    (state: any) => state.setEntryValues
+  );
+  const outValues = useApplicationStore((state: any) => state.outValues);
+  const setOutValues = useApplicationStore((state: any) => state.setOutValues);
+  const isLogged = useUserStore((state: any) => state.isLoggedIn);
 
   return (
     <div className="w-full h-[400px] text-black text-xs pt-5">
-      <div className="flex gap-5 mb-10 items-end">
-        <MultiSelect
-          data={keys}
-          value={entryValues}
-          onChange={(evt) => {
-            setEntryValues(evt);
-          }}
-          label="X Axis"
-          placeholder="Pick all that you like"
-        />
-        <MultiSelect
-          data={keys}
-          value={outValues}
-          onChange={(evt) => {
-            setOutValues(evt);
-          }}
-          label="Y Axis"
-          placeholder="Pick all that you like"
-        />
-        <DataExporter data={data} />
-      </div>
-
+      {!simpleView && (
+        <div className="flex gap-5 mb-10 items-end">
+          <MultiSelect
+            data={keys}
+            value={entryValues}
+            onChange={(evt) => {
+              setEntryValues(evt);
+            }}
+            label="X Axis"
+            placeholder="Pick all that you like"
+          />
+          <MultiSelect
+            data={keys}
+            value={outValues}
+            onChange={(evt) => {
+              setOutValues(evt);
+            }}
+            label="Y Axis"
+            placeholder="Pick all that you like"
+          />
+          <DataExporter data={data} />
+          {isLogged && (
+            <Button
+              disabled={entryValues.length === 0 || outValues.length === 0}
+              color={"green"}
+              onClick={() => {
+                onSaveVisualization(entryValues, outValues);
+              }}
+            >
+              Save visualization
+            </Button>
+          )}
+        </div>
+      )}
       <ResponsiveContainer width="100%" height={350}>
         <ComposedChart
           width={400}
@@ -47,40 +81,19 @@ export const BarChartVisualization = ({ data }: any) => {
           data={data}
           margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
         >
-          {entryValues.map((datakey) => (
-            <XAxis dataKey={datakey} />
-          ))}
-
-          <Tooltip />
-          <CartesianGrid stroke="#f5f5f5" />
-
-          {outValues.map((datakey) => (
-            <Line
-              type="monotone"
-              dataKey={datakey}
-              stroke="#ff7300"
-              yAxisId={0}
-            />
-          ))}
-        </ComposedChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height={350}>
-        <ComposedChart
-          width={400}
-          height={400}
-          data={data}
-          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-        >
-          {entryValues.map((datakey) => (
+          {entryValues.map((datakey: any) => (
             <XAxis dataKey={datakey} />
           ))}
           <Tooltip />
-          <CartesianGrid stroke="#f5f5f5" />
-          {outValues.map((datakey) => (
+          <CartesianGrid
+            stroke={theme.colorScheme === "dark" ? "white" : "black"}
+          />
+          {outValues.map((datakey: any) => (
             <Bar
               type="monotone"
               dataKey={datakey}
               stroke="#ff7300"
+              fill="#ff7300"
               yAxisId={0}
             />
           ))}

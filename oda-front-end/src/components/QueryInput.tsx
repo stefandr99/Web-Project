@@ -6,11 +6,19 @@ import { sparql } from "@codemirror/legacy-modes/mode/sparql";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
 import { executeSparqlQuery } from "../services/query";
 import { useApplicationStore } from "../useApplicationStore";
+import { Button, Input, LoadingOverlay, Select } from "@mantine/core";
 
-const QueryInput = () => {
-  const [dbsource, setdbSource] = useState<any>("http://togostanza.org/sparql");
-  const [query, setQuery] =
-    useState<string>(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+const queryTitles: string[] = [
+  "Pick a query",
+  "TogoStanza Genetic Information",
+  "Japan Prefectures Area",
+];
+
+const queryPresets = [
+  {
+    title: "TogoStanza Genetic Information",
+    endpoint: "http://togostanza.org/sparql",
+    query: `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX id_tax:<http://identifiers.org/taxonomy/>
     PREFIX tax: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
     PREFIX stats:  <http://togogenome.org/stats/>
@@ -38,51 +46,106 @@ const QueryInput = () => {
       # Signal transduction histidine kinase (IPR005467)
       ?protein rdfs:seeAlso ipr:IPR005467 .
     } GROUP BY ?organism ?label ?length ?genes ORDER BY ?length
-          `);
+          `,
+  },
+  {
+    title: "Japan Prefectures Area",
+    endpoint: "http://dbpedia.org/sparql",
+    query: `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX yago: <http://dbpedia.org/class/yago/>
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+
+SELECT ?pref ?area
+WHERE {
+  ?s a yago:WikicatPrefecturesOfJapan ;
+     rdfs:label ?pref ;
+     dbpedia-owl:areaTotal ?area_total .
+  FILTER (lang(?pref) = 'en')
+  BIND ((?area_total / 1000 / 1000) AS ?area)
+}
+ORDER BY DESC(?area)`,
+  },
+];
+
+const QueryInput = () => {
+  const [value, setValue] = useState<any>(null);
+  const [dbsource, setdbSource] = useState<any>("");
+  const [query, setQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const nextStep = useApplicationStore((state) => state.nextStep);
   const setData = useApplicationStore((state) => state.setDataResult);
+  const setStoreQuery = useApplicationStore((state) => state.setQuery);
+  const setStoreSource = useApplicationStore((state) => state.setSource);
+
+  const setGPTSuggestion = useApplicationStore(
+    (state) => state.setGPTSuggestion
+  );
 
   function runQuery() {
+    setIsLoading(true);
     executeSparqlQuery(query, dbsource)
       .then((response) => {
         if (response && response.data) {
-          setData(response.data);
+          setGPTSuggestion(response.data.graphSuggestion);
+          setData(response.data.data);
+          setStoreQuery(query);
+          setStoreSource(dbsource);
           nextStep();
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setIsLoading(false);
+      });
   }
 
   const onChange = React.useCallback((value: any) => {
     setQuery(value);
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className=" pb-16 w-full h-full">
       <div className="flex justify-between py-8">
-        <div className="w-1/2">
-          <input
+        <div className="w-1/2 relative">
+          <Input
+            disabled={isLoading}
+            className={"mt-0.5"}
+            color="orange"
+            placeholder="Query DB Source"
             defaultValue={dbsource}
-            onChange={(e) => setdbSource(e.target.value)}
-            className="bg-[#1a1a1a] text-sm py-2 px-2 w-full border-black border-[1px] rounded-lg"
-          ></input>
+            onChange={(e: any) => setdbSource(e.target.value)}
+            size="sm"
+          />
         </div>
-        <button
-          className="text-xl bg-orange-500 hover:bg-orange-600 transition-all ease-in-out duration-150 px-4 py-2 rounded-xl"
-          onClick={() => {
-            runQuery();
-          }}
-        >
-          Run
-        </button>
+        <div className={"flex items-center gap-5 mb-1"}>
+          <Select
+            value={queryTitles[0]}
+            onChange={(value) => {
+              const query = queryPresets.find((q) => q.title === value);
+              if (query) {
+                setQuery(query.query);
+                setdbSource(query.endpoint);
+              }
+            }}
+            data={queryTitles}
+          />
+          <Button
+            disabled={isLoading}
+            color="orange"
+            radius="md"
+            size="md"
+            variant="gradient"
+            gradient={{ from: "orange", to: "red" }}
+            onClick={() => {
+              runQuery();
+            }}
+          >
+            Run
+          </Button>
+        </div>
       </div>
-      <div className="text-xs rounded-md overflow-hidden">
+      <div className="text-xs rounded-md overflow-hidden relative">
+        <LoadingOverlay visible={isLoading} overlayBlur={2} />
         <CodeMirror
           theme={okaidia}
           value={query}

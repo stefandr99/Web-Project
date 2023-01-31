@@ -1,31 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { Button, MultiSelect, useMantineTheme } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
   ResponsiveContainer,
   Tooltip,
-  Pie,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
+  XAxis,
 } from "recharts";
-import {
-  Button,
-  MultiSelect,
-  TransferList,
-  TransferListData,
-  useMantineTheme,
-} from "@mantine/core";
-import { DataExporter } from "../DataExporter";
 import { useApplicationStore } from "../../useApplicationStore";
-import { useParams } from "react-router-dom";
 import { useUserStore } from "../../useUserStore";
+import { DataExporter } from "../DataExporter";
 
-export function RadarChartVisualization({
+export const LineChartVisualization = ({
   data,
   onSaveVisualization,
   simpleView,
-}: any) {
+}: any) => {
   const theme = useMantineTheme();
   const keys = Object.keys(data[0]).map((value) => ({ value, label: value }));
   const entryValues = useApplicationStore((state: any) => state.entryValues);
@@ -46,9 +39,9 @@ export function RadarChartVisualization({
   }, []);
 
   return (
-    <div className="w-full h-[700px] text-black text-xs pt-5">
+    <div className="w-full h-[400px] text-black text-xs pt-5">
       {!simpleView && (
-        <div className="flex items-center gap-5 mb-10">
+        <div className="flex gap-5 mb-10 items-end">
           <MultiSelect
             data={keys}
             value={entryValues}
@@ -84,23 +77,32 @@ export function RadarChartVisualization({
         </div>
       )}
 
-      <ResponsiveContainer width="100%" height="100%">
-        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey={entryValues[0]} />
-          <PolarRadiusAxis />
-          {outValues.map((datakey: any) => (
-            <Radar
-              dataKey={datakey}
-              stroke={theme.colorScheme === "dark" ? "white" : "black"}
-              fill={"#e8590c"}
-              fillOpacity={0.6}
-            />
+      <ResponsiveContainer width="100%" height={350}>
+        <ComposedChart
+          width={400}
+          height={400}
+          data={data}
+          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+        >
+          {entryValues.map((datakey: any) => (
+            <XAxis dataKey={datakey} />
           ))}
 
           <Tooltip />
-        </RadarChart>
+          <CartesianGrid
+            stroke={theme.colorScheme === "dark" ? "white" : "black"}
+          />
+
+          {outValues.map((datakey: any) => (
+            <Line
+              type="monotone"
+              dataKey={datakey}
+              stroke="#ff7300"
+              yAxisId={0}
+            />
+          ))}
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );
-}
+};
