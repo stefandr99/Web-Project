@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>User Guide</title>
+    <link rel="stylesheet" href="./scholarly.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="./Scholarly HTML_files/scholarly.min.js.download"></script>
+  </head>
+  <body prefix="schema: http://schema.org" cz-shortcut-listen="true">
+    <div class="banner">
+      <img src="./icon/user-guide.svg" width="227" height="50" alt="User Guide logo">
+      <div class="status">Open Dataset Visualizer</div>
+    </div>
+    <header>
+      <h1>ODA User Guide</h1>
+    </header>
+    <div role="contentinfo">
+      <ol role="directory">
+        <li><a href="#welcome-page"><span>1. </span>Welcome page</a></li>
+        <li><a href="#create-account"><span>2. </span>Create an user account (Register into application)</a></li>
+        <li><a href="#login"><span>3. </span>Login</a></li>
+        <li><a href="#visualize"><span>4. </span>Visualisation</a>
+          <ol>
+            <li><a href="#visualize-options"><span>4.1. </span>Visualize data access options</a></li>
+            <li><a href="#execute-query"><span>4.2. </span>Execute query</a></li>
+            <li><a href="#choose-chart"><span>4.3. </span>Choose chart</a></li>
+            <li><a href="#view-plain-data"><span>4.4. </span>View plain data</a></li>
+            <li><a href="#visualize-export"><span>4.5. </span>Visualize data and export json</a></li>
+            <li><a href="#save-visualisation"><span>4.6. </span>Save visualisation</a></li>
+            <li><a href="#view-saved-visualisation"><span>4.7. </span>View saved visualizations</a></li>
+            <li><a href="#share-visualisation"><span>4.8. </span>Share visualization</a></li>
+          </ol>
+        </li>
+    </div>
+
+    <section id="welcome-page">
+      <h2><span>1. </span>Welcome page</h2>
+      <p>
+        Once you have accesed the <a href="https://theia-oda.netlify.app/">ODa application</a>, you will 
+        be welcomed with the main page of the application.
+
+        <div style="display:flex;flex-direction:column; align-items:center;">
+          <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/welcome_page.png" />
+          <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Welcome page</figcaption>
+        </div>
+      </p>
+    </section>
+
+    <section id="create-account">
+      <h2><span>2. </span>Create an user account (Register into application)</h2>
+      <p>
+        In ODa you are able to create an user account (to register) in order to perform several actions 
+        across the application.
+        You can do it by clicking 2 button from the web page:
+        <div style="display:flex;flex-direction:column; align-items:center;">
+          <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/register-button.png" />
+          <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Register</figcaption>
+        </div>
+      </p>
+      <p>
+        In order to register in the ODa application, you have to complete the registration form by 
+        inserting your full name, your email address and a password. After these, you must agree with the 
+        fact that the website could use your data if needed.
+        <div style="display:flex;flex-direction:column; align-items:center;">
+          <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/registration-page.png" />
+          <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Registration page</figcaption>
+        </div>
+      </p>
+    </section>
+
+    <section id="login">
+      <h2><span>3. </span>Login</h2>
+      <p>
+        Once you have successfully registered in the ODa application, you will be able to log in it with your 
+        credentials.
+        <div style="display:flex;flex-direction:column; align-items:center;">
+          <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/login-options.png" />
+          <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Login options</figcaption>
+        </div>
+      </p>
+    </section>
+
+    <section id="visualize">
+      <h2><span>4. </span>Visualisation</h2>
+      <p>
+        Once you have successfully logged in the ODa application, you will be able to perform 2 actions:
+        <ul>
+          <li>
+            Visualize data from a SPARQL query on a public dataset specified by you;
+          </li>
+          <li>
+            View all your saved queries, including those ones received from your friends;
+          </li>
+        </ul>
+      </p>
+      <section id="visualize-options">
+        <h3><span>4.1 </span>Visualize data access options</h3>
+        <p>
+          You can query an open dataset with a SPARQL query thru ODa application. To do this, you have to click 
+          on one of the 2 buttons from the page:
+          <div style="display:flex;flex-direction:column; align-items:center;">
+            <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/visualize-options.png" />
+            <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Visualize data options</figcaption>
+          </div>
+        </p>
+        </section>
+
+        <section id="execute-query">
+        <h3><span>4.2 </span>Execute query</h3>
+        <p>
+          In the visualize page of the ODa application, you can choose between:
+          <ul>
+            <li>
+              Specifying the public dataset in the top text box and writing the query in the main text box of the page 
+              (option 1 in image)
+            </li>
+            <li>
+              Choosing one of our default saved queris from the top right corner select in the page (option 2 in image)
+            </li>
+          </ul> 
+          <div style="display:flex;flex-direction:column; align-items:center;">
+            <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/visualize-data.png" />
+            <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Options to query dataset</figcaption>
+          </div>
+          <p>
+            Once you finished writing your SPARQL query, you can execute it by clicking on the button "Run" from the top right 
+            corner of the page.
+          </p>
+        </p>
+      </section>
+
+      <section id="choose-chart">
+        <h3><span>4.3 </span>Choose chart</h3>
+        <p>
+          Once you have written your SPARQL query or chosen one of our default queries, you have to choose which type of chart 
+          you want to use in order to be represented the data retrieved from the dataset.
+          <br/>
+          <b>Info:</b> At the top of the page will be written an AI generated recommandation to visualize and a description of your data.
+          <div style="display:flex;flex-direction:column; align-items:center;">
+            <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/choose-chart.png" />
+            <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Choose chart visualisation</figcaption>
+          </div>
+        </p>
+      </section>
+
+      <section id="view-plain-data">
+        <h3><span>4.4 </span>View plain data</h3>
+        <p>
+          You can choose to see the retrieved data in a tabular view by selecting the file "Table" top of the page
+          <div style="display:flex;flex-direction:column; align-items:center;">
+            <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/tabular-data.png" />
+            <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Tabular data view</figcaption>
+          </div>
+        </p>
+      </section>
+
+      <section id="visualize-export">
+        <h3><span>4.5 </span>Visualize data and export json</h3>
+        <p>
+          After you chose the type of chart you want to visualize, you have to select which fields need to be included 
+          in the graphic representation from the 2 select boxes as shown in the picture "View chart".
+          As well as visualizing, you can save your visualization in json type by clicking the button "Export JSON" from 
+          the top of the page.
+        </p>
+      </section>
+
+      <section id="save-visualisation">
+        <h3><span>4.6 </span>Save visualisation</h3>
+        <p>
+          Once you have the view of the selected visualization with its fields, you can save this graphical 
+          representation in your account and access it later if you need.
+        </p>
+      </section>
+      <div style="display:flex;flex-direction:column; align-items:center;">
+        <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/visualize-chart.png" />
+        <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">View chart, save and export JSON</figcaption>
+      </div>
+    </section>
+
+    <section id="view-saved-visualisation">
+      <h3><span>4.7 </span>View saved visualizations</h3>
+      <p>
+        You can access "My visualizations" section of the application by selecting it from the right side menu of the webpage. 
+        In this section are included your own saved graphical representations and received representations from your friends.
+      </p>
+      <div style="display:flex;flex-direction:column; align-items:center;">
+        <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/saved-visualizations.png" />
+        <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">View saved visualizations</figcaption>
+      </div>
+    </section>
+
+    <section id="share-visualisation">
+      <h3><span>4.8 </span>Share visualization</h3>
+      <p>
+        In the view page of a visualization, you can choose to share that visualisation by clicking the button "Share" from 
+        the top right corner of the page and writing friend's email in the pop-up box.
+      </p>
+      <div style="display:flex;flex-direction:column; align-items:center;">
+        <img style="max-width: 100%; margin-top: 12px;" src="./userGuide/share.png" />
+        <figcaption style="font-style: italic; margin-top: 12px; margin-bottom:12px">Share visualization</figcaption>
+      </div>
+    </section>
+  </section>  
+</body>
+</html>
