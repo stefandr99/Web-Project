@@ -7,8 +7,8 @@ Project for Web Development, second year Master's subject, made by
 
 # Resources
 - [Application Link](https://theia-oda.netlify.app/)
-- [Scholarly HTML Report](https://theia-oda-specifications.netlify.app/)
-- [Open API Specification](https://theia-oda-scholarly.netlify.app/)
+- [Scholarly HTML Report](https://theia-oda-scholarly.netlify.app/)
+- [Open API Specification](https://theia-oda-specifications.netlify.app/)
 - [User Guide](https://theia-oda-user-guide.netlify.app/)
 - [Application Youtube Demo](https://www.youtube.com/watch?v=nmy383BuR-4)
 
