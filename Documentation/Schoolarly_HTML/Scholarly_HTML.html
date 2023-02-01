@@ -21,6 +21,10 @@
       <ol role="directory">
         <li><a href="#abstract"><span>1. </span>Abstract</a></li>
         <li><a href="#introduction"><span>2. </span>Introduction</a></li>
+        <ol>
+          <li><a href="#introduction-initial-goals"><span>2.1. </span>Initial goals</a></li>
+          <li><a href="#introduction-achievements"><span>2.2. </span>What we've achieved</a></li>
+        </ol>
         <li><a href="#architecture"><span>3. </span>Arhitecture</a></li>
         <li><a href="#software-design"><span>4. </span>Software Design</a>
           <ol>
@@ -29,20 +33,31 @@
             <li><a href="#software-design-use-case"><span>4.3. </span>UML Sequence Diagram</a></li>
           </ol>
         </li>
-        <li><a href="#spqrql"><span>5. </span>SPARQL and Datasets</a>
+        <li><a href="#front-end"><span>5. </span>Front-End</a>
           <ol>
-            <li><a href="#sparql-subsection"><span>5.1. </span>SPARQL</a></li>
-            <li><a href="#datasets"><span>5.2. </span>Datasets</a></li>
-            <li><a href="#sparql-endpoint"><span>5.3. </span>SPARQL endpoint</a></li>
+            <li><a href="#front-end-vite"><span>5.1. </span>Vite</a></li>
+            <li><a href="#front-end-react"><span>5.2. </span>React with TypeScript</a></li>
+            <li><a href="#front-end-mantine"><span>5.3. </span>Mantine UI</a></li>
+            <li><a href="#front-end-zustand"><span>5.4. </span>Zustand</a></li>
+            <li><a href="#front-end-codeMirror"><span>5.5. </span>CodeMirror</a></li>
+            <li><a href="#front-end-recharts"><span>5.6. </span>Recharts</a></li>
+            <li><a href="#front-end-jsonld"><span>5.7. </span>JSON-LD Detection</a></li>
           </ol>
         </li>
-        <li><a href="#auth"><span>6. </span>Authentication and authorization</a>
+        <li><a href="#spqrql"><span>6. </span>SPARQL and Datasets</a>
           <ol>
-            <li><a href="#auth-authentication"><span>6.1. </span>Authentication endpoints</a></li>
-            <li><a href="#auth-authentication"><span>6.2. </span>Authorization endpoints</a></li>
+            <li><a href="#sparql-subsection"><span>6.1. </span>SPARQL</a></li>
+            <li><a href="#datasets"><span>6.2. </span>Datasets</a></li>
+            <li><a href="#sparql-endpoint"><span>6.3. </span>SPARQL endpoint</a></li>
+          </ol>
+        </li>
+        <li><a href="#user"><span>7. </span>User management and Authentication modules</a>
+          <ol>
+            <li><a href="#user-authentication"><span>7.1. </span>Authentication module</a></li>
+            <li><a href="#user-management"><span>7.2. </span>User module</a></li>
           </ol>  
         </li>
-        <li><a href="#deployment"><span>7. Application Deploy</span></a>
+        <li><a href="#deployment"><span>8. Application Deploy</span></a>
       <dl>
         <dt>Authors</dt>
         <dd>
@@ -59,8 +74,9 @@
         ODA (Open Dataset Visualizer) is a semantic web applicaton which has the purpose to represent data 
         from open datasets in different forms. The main target of the application is to provide userful visualizations 
         to end users in order to understand better data / information / knowledge. The system is designed to allow users 
-        to write a raw SPARQL queries, to specify which column of their representation they want to be included in the resulted 
-        chart and in what type of chart they want to be data represented.
+        to write a raw SPARQL queries specifying the dataset URL or to choose one of the application query from the top 
+        right of the page. The users are able to select the type of chart to represent data, which fields to be included in 
+        representation, to save a visualization and to share it with a friend.
       </p>
     </section>
     <section id="introduction" role="doc-introduction">
@@ -71,7 +87,7 @@
         application and the what we've managed to implement.
 
 
-        <section>
+        <section id="introduction-initial-goals">
 
           <h3><span>2.1 </span>Initial goals</h3>
 
@@ -95,28 +111,27 @@
           </ul>
         </p>
         <p>
-          The application is built in 3 modules (which will be described in the following document sections):
+          The application is built in 2 modules (which will be described in the following document sections):
           <ul>
             <li>
-              Authentication and authorization web API;
+              Backend module managing user data and executing the written SPARQL queries. It is an Web API 
+              application with two types of endpoints: SPARQL endpoints (one with ChatGPT integration and one without) 
+              and user endpoints (create account, login, save visualization, share and see saved data representations) 
             </li>
             <li>
-              SPQRQL data retrieving web API;
-            </li>
-            <li>
-              User interface and user experience: writing queries, visualize charts (represented data), save and 
-              share charts
+              User interface and user experience: register, login, logout, write queries, visualize charts (represented data), 
+              save and share charts
             </li>
           </ul>
         </p>
 
         </section>
 
-        <section>
+        <section id="introduction-achievements">
 
           <h3><span>2.2 </span>What we've achieved</h3>
 
-          <p>We have successfully implemented all the initial goals outlined, with the exception of updating saved diagrams. The application has been developed in three modules: the Authentication and authorization web API, the SPARQL data retrieving web API, and the User interface and user experience, which includes writing queries, visualizing charts, saving and sharing charts. The users are able to write raw SPARQL queries in the application's query editor, select columns of retrieved data to be represented, and choose the type of diagrams to display the results. They are able to save charts for future use and share them with other users, but currently cannot update the saved diagrams by adding, deleting, or modifying columns or data sources.</p>
+          <p>We have successfully implemented all the initial goals outlined, with the exception of updating saved diagrams. The application has been developed in three modules: the Authentication web API, the SPARQL data retrieving web API, and the User interface and user experience, which includes writing queries, visualizing charts, saving and sharing charts. The users are able to write raw SPARQL queries in the application's query editor, select columns of retrieved data to be represented, and choose the type of diagrams to display the results. They are able to save charts for future use and share them with other users, but currently cannot update the saved diagrams by adding, deleting, or modifying columns or data sources.</p>
 
           <p>Furthermore, it is also worth mentioning that we have utilized d3-sparql instead of communica for querying SPARQL data. d3-sparql is a library that facilitates the retrieval and visualization of RDF data using SPARQL queries, and it provides a simple and intuitive interface for developers. By using d3-sparql, we have been able to leverage its capabilities to enhance the functionality of our application and provide a better user experience. This choice of library has allowed us to effectively manage the data retrieval and visualization process, while also providing a high level of customization and control for users.</p>
         </section>
@@ -133,20 +148,22 @@
         <img style="max-width: 100%" src="./diagrams/backend_architecture.png" />
         <figcaption style="font-style: italic; margin-top: 12px;">Fig.1 - ODa Backend architecture</figcaption>
       </div>
-      <p>For the backend we've decided to take a modular - microservice approach. This can help us develop the modules independently and integrate those together when they are done. Such approach
-        also helps us with the testing and allows each person responsible for the microservice to develop in the desired language without imposing it on the other developers. All the microservices
-      will be glued together with the help of an API Gateway. Diving deeper into each of the microservices :</p>
+      <p>
+        For the backend we've decided to take a monolith approach, but dividing the routes in two categories: SPARQL endpoints 
+        which retrieve data from open datasources based on a query plus asking ChatGPT related to the most suitable chart for the 
+        given data and user endpoints which manage user management logic such as create an account, log in the application, save 
+        a grapghic representation and share it with friends. Diving deeper into each of this two modules:
+      </p>
       <ul>
         <li>
-          <b>Authentication and authorization</b> - this microservice will be responsible for the authentication and authorization of the users. 
-           It will be implemented in Java using Spring Boot. The authorization will be done using the roles of the users.
+          <b>SPARQL module</b> - this controller will make use of openAI API which will allows us to interact with ChatGPT in order to
+          receive the most suitable representation for that kind of data (obtained by executing SPARQL query). This one will generate also 
+          a natural language description of the data which will be exposed to the end user in the interface.
         </li>
         <li>
-          <b>SPARQL Query Microservice</b> - this microservice will be responsible for the retrieval of the data from the SPARQL endpoint. 
-          It will be implemented in NodeJS. The data will be retrieved using the SPARQL queries written by the users.
-        </li>
-        <li>
-          <b>Sharing Visualization Microservice</b> - this microservice will be responsible for the sharing of the visualizations between users.
+          <b>User management module</b> - this module is responsible with user data management across the application. This controller has 
+          several user related APIs that allows the end user to perform actions as create an account (/auth/register), save a data representation 
+          (/user/save) and share a visualization with a friend (/user/share).
         </li>
       </ul>
       <div style="display: flex; justify-content:center; align-items: center; flex-direction: column; ">
@@ -190,8 +207,8 @@
           can directly input the SPARQL query in the query editor and execute it. After the query has been executed and the user received the data he can choose which columns he wants to
           visualize and what type of visualization he wants to use. After the user has chosen the columns and the type of visualization he will see the visualization.
           The user then can save the visualization if he wants to for later use, but in order to do that he will have to create an account. If the user already has an account he can login.
-          After the user has logged in he can save the visualization and use it later. The user can also share the visualization with other users. The user can view other user's visualizations
-          and use them for his own purposes if he has the permission to do so and the link to the visualization
+          After the user has logged in he can save the visualization and use it later. The user can also share the visualization with other users. The user can use other users's visualisations 
+          if they shared their visualisations with the respective user. 
         </p>
       </section>
       <section id="software-design-use-case">
@@ -245,28 +262,27 @@
         </div>
         <p>
           The sequence diagram describes how modules interact with each other based on the user actions. ODa module represents the front-end application and is the only thing that the user interacts with.
-          The ODa module will send the SPARQL query to the SPARQL Query Microservice. The SPARQL Query Microservice will send the query to the SPARQL endpoint and will receive the data.
-          The SPARQL Query Microservice will send the data to the ODa module and the ODa module will display the data to the user. The user can then choose which columns he wants to visualize and what type of visualization he wants to use.
+          The ODa module will send the SPARQL query to the SPARQL Query Route. The SPARQL Query Route will send the query to the SPARQL endpoint and will receive the data.
+          The SPARQL Query Route will send the data to the ODa module and the ODa module will display the data to the user. The user can then choose which columns he wants to visualize and what type of visualization he wants to use.
           The ODa module within it will create the visualization and will show it to the user.
           If the user wants to save the visualization he will have to create an account or login if he already has an account.
-          The ODa module will send the request to the Auth Microservice with the credentials the user entered.
-          The Auth Microservice will check if the user credentials are valid and will send back the response if the user is allowed to save the visualization.
-          If the user is allowed to save the visualization the ODa module will send the request to the Sharing Microservice with the data of the visualization.
-          The Sharing Microservice will save the visualization in the Database and will send back the response to the ODa module.
+          The ODa module will send the request to the Auth Route with the credentials the user entered.
+          The Auth Route will check if the user credentials are valid and will send back the response if the user is allowed to save the visualization.
+          If the user is allowed to save the visualization the ODa module will send the request to the User Route with the data of the visualization.
+          The User Route will save the visualization in the Database and will send back the response to the ODa module.
           If the user wants to share the visualization with other users he will select which visualization he wants to share.
-          The ODa module will send the request to the Sharing Microservice with the data of the visualization.
-          The Sharing Microservice will change the permissions to the visualization and will send back the response to the ODa module.
+          The ODa module will send the request to the User Route with the data of the visualization.
+          The User Route will change the permissions to the visualization and will send back the response to the ODa module.
           If the user wants to view other user's visualizations he will enter the link of the visualization.
-          The ODa module will send the request to the Sharing Microservice with the link of the visualization.
-          The Sharing Microservice will check if the user has the permission to view the visualization and will send back the response to the ODa module.
-
+          The ODa module will send the request to the User Route with the link of the visualization.
+          The User Route will check if the user has the permission to view the visualization and will send back the response to the ODa module.
         </p>
       </section>
     </section>
 
     <section id="front-end">
       <h2><span>5. </span>Front-End</h2>
-      <section>
+      <section id="front-end-vite">
         <h3><span>5.1 </span>Vite</h3>
         <p>
           Vite is a build tool that aims to provide a faster and leaner development experience for modern web projects. It consists of two major parts:
@@ -297,7 +313,7 @@
             </li>
         </p>
       </section>
-      <section>
+      <section id="front-end-react">
         <h3><span>5.2 </span>React with TypeScript</h3>
         <p>
           React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers and companies.
@@ -308,7 +324,7 @@
           Any browser. Any host. Any OS. Open source.
         </p>
       </section>
-      <section>
+      <section id="front-end-mantine">
         <h3><span>5.3</span> Mantine UI</h3>
         <p>
           Mantine is a React UI library that provides a set of components and hooks to build your own design system or design a new website.
@@ -344,7 +360,7 @@
         </p>
       </section>
 
-      <section>
+      <section id="front-end-zustand">
         <h3><span>5.4</span> Zustand</h3>
         <p>
           We have two stores across the app, one for the user and one for the visualizations.
@@ -368,7 +384,7 @@
           
         </p>
       </section>
-      <section>
+      <section id="front-end-codeMirror">
         <h3><span>5.5</span> CodeMirror</h3>
         <p>
           CodeMirror is a versatile text editor implemented in JavaScript for the browser. It is specialized for editing code, and comes with a number of language modes and addons that implement more advanced editing functionality.
@@ -384,7 +400,7 @@
             </div>
       </section>
 
-      <section>
+      <section id="front-end-recharts">
         <h3><span>5.6</span> Recharts</h3>
         <p>
           Recharts is a Redefined chart library built with React and D3.
@@ -438,7 +454,7 @@
           </ul>
       </section>
 
-      <section>
+      <section id="front-end-jsonld">
         <h3><span>5.7</span>JSON-LD Detection</h3>
 
         <p>
@@ -489,13 +505,13 @@
     </section>
 
     <section id="spqrql">
-      <h2><span>5. </span>SPQRQL and Datasets</h2>
+      <h2><span>6. </span>SPQRQL and Datasets</h2>
       <p>
         The application will be used by users to represent different kind of data in several types of charts. 
         The information is retireved via a SPARQL endpoint implemented in <a href="https://nodejs.org/en/">Node.js</a> from different open datasets.
       </p>
       <section id="sparql-subsection">
-        <h3><span>5.1 </span>SPAQRL</h3>
+        <h3><span>6.1 </span>SPAQRL</h3>
         <p>
           SPARQL is a <a href="https://www.w3.org/TR/sparql11-query/">query language</a> and a 
           <a href="https://www.w3.org/TR/rdf-sparql-protocol/">protocol</a> 
@@ -510,7 +526,7 @@
         </p>
       </section>
       <section id="datasets">
-        <h3><span>5.2 </span>Datasets</h3>
+        <h3><span>6.2 </span>Datasets</h3>
         <p>
           In ODA, when an user wants to retireve data by writing an SPARQL query in the page query editor, they will be able 
           to specify which open dataset they target. Being a flexible application, user has the posibility to insert the link of
@@ -526,7 +542,7 @@
         </p>
       </section>
       <section id="sparql-endpoint">
-        <h3><span>5.3 </span>SPARQL endpoint</h3>
+        <h3><span>6.3 </span>SPARQL endpoint</h3>
         <p>
           In order to retireve data from chosen open dataset, the user has to write a SPQRQL query in the 
           query editor. When submitting the written query, an API call will be made by the front-end application.
@@ -587,59 +603,131 @@
         </p>
       </section>
     </section>
-    <section id="auth">
-      <h2><span>6. </span>Authentication and authorization</h2>
+    <section id="user">
+      <h2><span>7. </span>User management and Authentication modules</h2>
       <p>
-        ODA application allows users to qury an open dataset via a SPARQL endpoint implemented in Node.js as described above. In order to perform 
-        all specified actions, firstly they have to register in the application with an username and a password. Based on their credentials, 
-        the users will be allowed to save and update an SPARQL query or to share a query with another application user.
-        As it can be seen in the project architecture presented above, there will be implementend three microservice for every section of the 
-        application: authentication, open datasets queries and authorization in order to perform different actions to an executed query.
+        ODA application allows users to query an open dataset via a SPARQL endpoint implemented in Node.js as described above. ODa application allows 
+        unauthenticated users to execute any SPARQL query having as source an open dataset, choose which chart to represent returned data and which fields to
+        be included in the visualisation. In order to perform user related actions such as save, view saved representations and share they have to register 
+        with an username and a password. Based on their credentials, 
+        the users will be allowed to save and share an chart representation with another application user.
+        As it can be seen in the project architecture presented above, there will be implementend two modules: open datasets queries and user management in 
+        order to perform different actions to an executed query.
       </p>
-      <section id="auth-authentication">
-        <h3><span>6.1 </span>Authentication endpoints</h3>
-          In order to save, update and delete or to share a SPARQL query, the users should have an account. For this part of the application 
-          we will have an authentication microservice implemented in Java Spring Framework.
-          For authentication there will be the following Java endpoints:
+      <section id="user-authentication">
+        <h3><span>7.1 </span>Authentication module</h3>
+          In order to save, share and view all its visualisations the users should have an account.
+          For authentication there will be the following endpoints:
           <ul>
             <li>
-              POST: <b>auth/user</b> - create an user account
+              POST: <b>/auth/register</b> - create an user account
+              <br/>
+              Payload example: 
+              <br/>
+              <code>
+                {
+                  <br/>
+                  &emsp;"email": "joe.doe@example.com",
+                  <br/>
+                  &emsp;"name": "Joe Doe",
+                  <br/>
+                  &emsp;"password": "000000"
+                  <br/>
+                }
+              </code>
             </li>
             <li>
-              GET: <b>auth/user/{id}</b> - get user account by id
-            </li>
-            <li>
-              PUT: <b>auth/user/{id}</b> - update an user credentials 
-            </li>
-            <li>
-              DELETE: <b>auth/user/{id}</b> - delete an user account
+              POST: <b>/auth/login</b> - get user account by id
+              <br/>
+              Payload example: 
+              <br/>
+              <code>
+                {
+                  <br/>
+                  &emsp;"email": "joe.doe@example.com",
+                  <br/>
+                  &emsp;"password": "000000"
+                  <br/>
+                }
+              </code>
             </li>
           </ul>
       </section>
-      <section id="auth-authentication">
-        <h3><span>6.2 </span>Authorization endpoints</h3>
-        Having an account, users are allowed to share their SPARQL queries and their visualization with other users on the platform.
-        To do so, they must have the permission to share a specific query. This part of the application will be represented by another 
-        microservice implemented in Java Spring Framework.
-        For authorization there will be the following Java endpoints:
+      <section id="user-management">
+        <h3><span>7.2 </span>User module</h3>
+        <p>
+        Having an account, users are allowed to perform different actions related to executed queries across the application. 
+        As mentioned before, a SPARQL query can be executed by an unauthorized user, but to save, share, view saved visualizations 
+        there is a need of an account. An authorised user is able to save a certain visualization and add it in its 
+        visualisation "library" which can be accesed in the left side menu of the application. After selecting a certain chart 
+        to represent returned data by SPARQL endpoint, an authorized user can choose to share the respective chart visualisation 
+        with a friend across the application by specifying its email.
+        For this part of the application we implemented the following endpoints:
+        </p>
         <ul>
           <li>
-            POST: <b>auth/access</b> - create a permission for a specific query
+            POST: <b>/user/save</b> - save a SPARQL data chart representation
+            <br/>
+              Payload example: 
+              <br/>
+              <code>
+                {
+                  <br/>
+                  &emsp;"email": "stefandr@gmail.com",
+                  <br/>
+                  &emsp;"query": "Select from queries where",
+                  <br/>
+                  &emsp;"type": "Bar chart",
+                  <br/>
+                  &emsp;"outValues": [
+                  <br/>
+                    &emsp;&emsp;&emsp;"genes"
+                    <br/>
+                    &emsp;],
+                  <br/>
+                  &emsp;"entryValues": [
+                  <br/>
+                    &emsp;&emsp;&emsp;"name",
+                    <br/>
+                    &emsp;&emsp;&emsp;"level"
+                    <br/>
+                    &emsp;],
+                  <br/>
+                    &emsp;"title": "My special representation",
+                  <br/>
+                  &emsp;"description": "a very nice representation made by me",
+                  <br/>
+                  &emsp;"source": ""
+                  <br/>
+              }
+              </code>
           </li>
           <li>
-            GET: <b>auth/access/{userId}</b> - get all user's query list by user id
+            GET: <b>/user/</b> - get all user's saved queries (included those shared by its friends)
           </li>
           <li>
-            PUT: <b>auth/user/{userId}</b> - update permissions for a query 
+            GET: <b>/user/:id</b> - get by id a user SPARQL data chart representation
           </li>
           <li>
-            DELETE: <b>auth/user/{userId}/{queryId}</b> - delete an user's query 
+            POST: <b>/user/share</b> - share a SPARQL data chart representation with another user
+            <br/>
+            Payload example: 
+              <br/>
+              <code>
+                {
+                  <br/>
+                  &emsp;"userEmail": "joe.doe@example.com",
+                  <br/>
+                  &emsp;"queryId": "123-abx-xyz-987",
+                  <br/>
+                  &emsp;"friendEmail": "joe.doe.friend@example.com"
+                  <br/>
+                }
           </li>
         </ul>
       </section>
-    </section>
     <section id="deployment">
-      <h2><span>7. </span>Application Deploy</h2>
+      <h2><span>8. </span>Application Deploy</h2>
       <p>
         The React app will be hosted on Netlify, the Express app will be hosted on Fly.io.
       </p>
