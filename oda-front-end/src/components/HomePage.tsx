@@ -3,6 +3,8 @@ import React from "react";
 import { Eye, Save, User, UserPlus } from "react-feather";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../useUserStore";
+import { JsonLd } from "react-schemaorg";
+import { Dataset, WebPage } from "schema-dts";
 
 function HomePage() {
   const isLoggedIn = useUserStore((state: any) => state.isLoggedIn);
@@ -116,6 +118,14 @@ function HomePage() {
           )}
         </div>
       </div>
+      <JsonLd<WebPage>
+        item={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Theia Oda Visualizer HomePage",
+          inLanguage: "English",
+        }}
+      />
     </div>
   );
 }

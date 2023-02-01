@@ -15,6 +15,8 @@ import axios from "axios";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { APILink } from "../env";
+import { JsonLd } from "react-schemaorg";
+import { CreativeWork, Dataset } from "schema-dts";
 
 function Reviewer() {
   const [opened, setOpened] = React.useState(false);
@@ -114,6 +116,25 @@ function Reviewer() {
         </Badge>
         <ChartRenderer setOpened={false} simpleView={true} />
       </div>
+
+      <JsonLd<CreativeWork>
+        item={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: visualisation.title,
+          abstract: visualisation.description,
+          creator: userMail,
+        }}
+      />
+      <JsonLd<Dataset>
+        item={{
+          "@context": "https://schema.org",
+          "@type": "Dataset",
+          name: "SparQL Query",
+          url: visualisation.source,
+          text: visualisation.query,
+        }}
+      />
     </>
   );
 }

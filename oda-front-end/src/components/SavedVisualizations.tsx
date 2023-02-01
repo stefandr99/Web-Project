@@ -6,9 +6,13 @@ import { useApplicationStore } from "../useApplicationStore";
 import { useNavigate } from "react-router-dom";
 import imgUrl from "../assets/something_went_wrong.png";
 import { APILink } from "../env";
+import { JsonLd } from "react-schemaorg";
+import { CollectionPage } from "schema-dts";
 
 function SavedVisualizations() {
   const isLogged = useUserStore((state: any) => state.isLoggedIn);
+  const user = useUserStore((state: any) => state.userName);
+
   const token = useUserStore((state: any) => state.token);
   const setData = useApplicationStore((state: any) => state.setDataResult);
   const setVisualization = useApplicationStore(
@@ -76,50 +80,61 @@ function SavedVisualizations() {
   if (isFetching) return <div>Loading...</div>;
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-6 ">
-      {visualizations.map((visualization: any) => (
-        //@ts-ignore
-        <Card shadow="sm" p="lg" radius="md" withBorder>
-          <Group position="apart" mb="xs">
-            <Text weight={500}>{visualization.title}</Text>
-            <Badge color="pink" variant="light">
-              {visualization.type}
-            </Badge>
-            <Badge color="pink" variant="light">
-              {visualization.source}
-            </Badge>
-          </Group>
+    <>
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-6 ">
+        {visualizations.map((visualization: any) => (
+          //@ts-ignore
+          <Card shadow="sm" p="lg" radius="md" withBorder>
+            <Group position="apart" mb="xs">
+              <Text weight={500}>{visualization.title}</Text>
+              <Badge color="pink" variant="light">
+                {visualization.type}
+              </Badge>
+              <Badge color="pink" variant="light">
+                {visualization.source}
+              </Badge>
+            </Group>
 
-          <Text size="sm" color="dimmed">
-            {visualization.description}
-          </Text>
-          <Button
-            onClick={() => {
-              fetchVisualizationData(
-                visualization.source,
-                visualization.query.replace(/\\n/g, "\n")
-              )
-                .then((response: any) => {
-                  setData(response.data.data);
-                  setOutValues(visualization.outValues);
-                  setEntryValues(visualization.entryValues);
-                  setType(visualization.type);
-                  setVisualization(visualization);
-                  navigate("/saved/" + visualization._id);
-                })
-                .catch((error: any) => {
-                  console.log(error);
-                });
-            }}
-            fullWidth
-            mt="md"
-            radius="md"
-          >
-            View
-          </Button>
-        </Card>
-      ))}
-    </div>
+            <Text size="sm" color="dimmed">
+              {visualization.description}
+            </Text>
+            <Button
+              onClick={() => {
+                fetchVisualizationData(
+                  visualization.source,
+                  visualization.query.replace(/\\n/g, "\n")
+                )
+                  .then((response: any) => {
+                    setData(response.data.data);
+                    setOutValues(visualization.outValues);
+                    setEntryValues(visualization.entryValues);
+                    setType(visualization.type);
+                    setVisualization(visualization);
+                    navigate("/saved/" + visualization._id);
+                  })
+                  .catch((error: any) => {
+                    console.log(error);
+                  });
+              }}
+              fullWidth
+              mt="md"
+              radius="md"
+            >
+              View
+            </Button>
+          </Card>
+        ))}
+      </div>
+
+      <JsonLd<CollectionPage>
+        item={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Saved visualizations",
+          author: user,
+        }}
+      />
+    </>
   );
 }
 

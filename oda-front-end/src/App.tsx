@@ -4,7 +4,7 @@ import QueryPage from "./components/QueryPage";
 import { useApplicationStore } from "./useApplicationStore";
 import { IconGitBranch, IconGitCommit } from "@tabler/icons";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   AppShell,
   Navbar,
@@ -32,6 +32,8 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { json } from "d3";
 import SavedVisualizations from "./components/SavedVisualizations";
 import Reviewer from "./components/Reviewer";
+import { JsonLd } from "react-schemaorg";
+import { WebApplication } from "schema-dts";
 
 function AppWithinContext() {
   const step = useApplicationStore((state) => state.step);
@@ -336,6 +338,24 @@ function App() {
       >
         <NotificationsProvider>
           <AppWithinContext />
+          <JsonLd<WebApplication>
+            item={{
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Theia Oda Visualizer",
+              author: "Serghei Cunev, Stefan Dragoi, Nazar Fatikhov",
+              countryOfOrigin: "Romania, Republic of Moldova, Russia",
+              about: "Visualize your SPARQL queries with ease and style",
+              dateCreated: "2 February, 2022",
+              featureList:
+                "SPARQL Query, Visualization, Save, Share, OpenAI GPT-3",
+              availableOnDevice: "Desktop, Tablet",
+              softwareVersion: "1.0.0",
+              applicationCategory: "Visualization",
+              browserRequirements: "JavaScript enabled",
+              inLanguage: "English",
+            }}
+          />
         </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
